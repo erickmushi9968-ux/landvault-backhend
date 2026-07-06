@@ -1,0 +1,3151 @@
+
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LandVault — Soko Bora la Ardhi Tanzania</title>
+
+    <style>
+        /* ── RESET & ROOT ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+        :root {
+            --forest: #0D2B1A;
+            --forest-mid: #1A4029;
+            --forest-light: #2D6845;
+            --sand: #F5EDD8;
+            --sand-light: #FBF8F1;
+            --sand-dark: #E8D9B8;
+            --gold: #C9A84C;
+            --gold-light: #E8C96B;
+            --gold-dark: #A8832A;
+            --slate: #2C3E35;
+            --text-body: #3D4F45;
+            --text-muted: #7A9085;
+            --white: #FFFFFF;
+            --cream: #FEFCF7;
+            --shadow-sm: 0 2px 12px rgba(13, 43, 26, 0.08);
+            --shadow-md: 0 8px 40px rgba(13, 43, 26, 0.14);
+            --shadow-lg: 0 20px 80px rgba(13, 43, 26, 0.22);
+            --r: 12px;
+            --r-lg: 20px;
+            --r-xl: 32px;
+        }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--text-body);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar {
+            width: 6px
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--sand)
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--forest-light);
+            border-radius: 3px
+        }
+
+        /* ── CURSOR ── */
+        .cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform .15s ease;
+            mix-blend-mode: multiply;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform .4s cubic-bezier(.23, 1, .32, 1), opacity .3s;
+            opacity: .6;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 3rem;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all .4s ease;
+        }
+        nav.scrolled {
+            background: rgba(13, 43, 26, .95);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-md);
+        }
+        .nav-logo {
+            font-family: Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: .04em;
+            text-decoration: none;
+        }
+        .nav-logo span {
+            color: var(--white)
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center
+        }
+        .nav-links a {
+            color: rgba(255, 255, 255, .8);
+            text-decoration: none;
+            font-size: .875rem;
+            font-weight: 500;
+            letter-spacing: .04em;
+            transition: color .2s;
+        }
+        .nav-links a:hover {
+            color: var(--gold)
+        }
+        .btn-nav {
+            background: var(--gold);
+            color: var(--forest);
+            padding: .55rem 1.4rem;
+            border-radius: 100px;
+            font-size: .85rem;
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-decoration: none;
+            transition: all .25s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-nav:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(201, 168, 76, .4)
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+        .lang-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, .2);
+            color: rgba(255, 255, 255, .6);
+            padding: .2rem .6rem;
+            border-radius: 4px;
+            font-size: .7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            text-transform: uppercase;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .lang-btn.active {
+            background: var(--gold);
+            color: var(--forest);
+            border-color: var(--gold);
+        }
+        .lang-btn:hover:not(.active) {
+            border-color: rgba(255, 255, 255, .5);
+            color: var(--sand);
+        }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 3rem 4rem;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(13, 43, 26, .22), rgba(13, 43, 26, .22)),
+                url("https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1600&q=80");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: saturate(1.12) brightness(1.15);
+        }
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            opacity: .06;
+            background-image:
+                linear-gradient(rgba(245, 237, 216, .8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(245, 237, 216, .8) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 760px;
+        }
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: .75rem;
+            background: rgba(201, 168, 76, .12);
+            border: 1px solid rgba(201, 168, 76, .25);
+            color: var(--gold-light);
+            border-radius: 100px;
+            padding: .4rem 1.1rem;
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+        .hero-eyebrow::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .4
+            }
+        }
+        .hero-h1 {
+            font-family: Georgia, serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 300;
+            line-height: 1.08;
+            color: var(--sand);
+            letter-spacing: -.01em;
+        }
+        .hero-h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--gold-light);
+        }
+        .hero-sub {
+            margin-top: 1.5rem;
+            font-size: 1.05rem;
+            color: rgba(245, 237, 216, .6);
+            font-weight: 300;
+            line-height: 1.75;
+            max-width: 520px;
+        }
+        .hero-cta-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.8rem;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: var(--gold);
+            color: var(--forest);
+            padding: .85rem 2.2rem;
+            border-radius: 100px;
+            font-size: .95rem;
+            font-weight: 600;
+            letter-spacing: .03em;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            transition: all .25s;
+        }
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201, 168, 76, .4)
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--sand);
+            padding: .85rem 2.2rem;
+            border-radius: 100px;
+            font-size: .95rem;
+            font-weight: 500;
+            letter-spacing: .03em;
+            border: 1.5px solid rgba(245, 237, 216, .3);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            transition: all .25s;
+        }
+        .btn-outline:hover {
+            border-color: var(--sand);
+            background: rgba(245, 237, 216, .08)
+        }
+        .hero-stats {
+            position: absolute;
+            right: 3rem;
+            bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 2;
+        }
+        .hero-stat {
+            text-align: right
+        }
+        .hero-stat-num {
+            font-family: Georgia, serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .hero-stat-label {
+            font-size: .72rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: rgba(245, 237, 216, .4);
+            margin-top: .25rem;
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .5rem;
+            color: rgba(245, 237, 216, .35);
+            font-size: .7rem;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollAnim 2s infinite;
+        }
+        @keyframes scrollAnim {
+            0% {
+                transform: scaleY(0);
+                transform-origin: top
+            }
+            50% {
+                transform: scaleY(1);
+                transform-origin: top
+            }
+            51% {
+                transform-origin: bottom
+            }
+            100% {
+                transform: scaleY(0);
+                transform-origin: bottom
+            }
+        }
+
+        /* ── SECTION WRAPPER ── */
+        section {
+            padding: 6rem 3rem
+        }
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: .72rem;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--forest-light);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .section-label::before {
+            content: '';
+            width: 20px;
+            height: 1.5px;
+            background: var(--gold)
+        }
+        .section-title {
+            font-family: Georgia, serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--forest);
+        }
+        .section-title em {
+            font-style: italic;
+            color: var(--forest-light)
+        }
+
+        /* ── SEARCH BAR ── */
+        #search-section {
+            background: var(--forest);
+            padding: 3.5rem 3rem;
+        }
+        .search-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(245, 237, 216, .07);
+            border: 1px solid rgba(245, 237, 216, .12);
+            border-radius: var(--r-xl);
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+        }
+        .search-field {
+            display: flex;
+            flex-direction: column;
+            gap: .4rem
+        }
+        .search-field label {
+            font-size: .7rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: rgba(245, 237, 216, .45);
+            font-weight: 600;
+        }
+        .search-field select,
+        .search-field input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--sand);
+            font-size: .95rem;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: .4rem 0;
+            border-bottom: 1px solid rgba(245, 237, 216, .15);
+            transition: border-color .2s;
+            cursor: pointer;
+        }
+        .search-field select:focus,
+        .search-field input:focus {
+            border-color: var(--gold)
+        }
+        .search-field select option {
+            background: var(--forest);
+            color: var(--sand)
+        }
+        .btn-search {
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            padding: 1rem 1.8rem;
+            border-radius: var(--r);
+            color: var(--forest);
+            font-weight: 700;
+            font-size: .9rem;
+            letter-spacing: .04em;
+            transition: all .25s;
+            align-self: end;
+            white-space: nowrap;
+        }
+        .btn-search:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px)
+        }
+
+        /* ── LISTINGS ── */
+        #listings {
+            background: var(--sand-light)
+        }
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .listings-count {
+            font-size: .9rem;
+            color: var(--text-muted);
+            background: var(--sand);
+            padding: .5rem 1rem;
+            border-radius: 100px;
+            border: 1px solid var(--sand-dark);
+        }
+        .filter-tabs {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap
+        }
+        .filter-tab {
+            background: transparent;
+            border: 1.5px solid var(--sand-dark);
+            padding: .45rem 1rem;
+            border-radius: 100px;
+            font-size: .8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all .2s;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 500;
+        }
+        .filter-tab.active,
+        .filter-tab:hover {
+            background: var(--forest);
+            color: var(--gold);
+            border-color: var(--forest);
+        }
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* ── LAND CARD ── */
+        .land-card {
+            background: var(--white);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            border: 1px solid var(--sand-dark);
+            transition: all .35s cubic-bezier(.23, 1, .32, 1);
+            cursor: pointer;
+        }
+        .land-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(201, 168, 76, .3);
+        }
+        .card-image {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--forest-mid) 0%, var(--forest-light) 50%, #4a8f5f 100%);
+        }
+        .card-image-art {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .card-image-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .card-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(13, 43, 26, .85);
+            backdrop-filter: blur(10px);
+            color: var(--gold-light);
+            padding: .35rem .85rem;
+            border-radius: 100px;
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+        .card-featured {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--gold);
+            color: var(--forest);
+            padding: .3rem .7rem;
+            border-radius: 100px;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+        .card-body {
+            padding: 1.4rem
+        }
+        .card-price {
+            font-family: Georgia, serif;
+            font-size: 1.65rem;
+            font-weight: 600;
+            color: var(--forest);
+            line-height: 1;
+            margin-bottom: .5rem;
+        }
+        .card-price span {
+            font-size: .85rem;
+            color: var(--text-muted);
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 400;
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--slate);
+            margin-bottom: .4rem;
+            line-height: 1.4;
+        }
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            font-size: .82rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .card-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: .75rem;
+            border-top: 1px solid var(--sand-dark);
+            padding-top: 1rem;
+            margin-top: .5rem;
+        }
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: .2rem
+        }
+        .meta-label {
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .meta-val {
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--slate);
+        }
+        .card-footer {
+            padding: .9rem 1.4rem;
+            border-top: 1px solid var(--sand-dark);
+            background: var(--sand-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .deed-badge {
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: .06em;
+            padding: .3rem .7rem;
+            border-radius: 100px;
+        }
+        .deed-verified {
+            background: #E8F5ED;
+            color: #1B6B3A
+        }
+        .deed-pending {
+            background: #FEF3E2;
+            color: #A05A00
+        }
+        .deed-none {
+            background: #FEE8E8;
+            color: #A02020
+        }
+        .view-btn {
+            background: var(--forest);
+            color: var(--sand);
+            border: none;
+            padding: .45rem 1rem;
+            border-radius: var(--r);
+            font-size: .8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .view-btn:hover {
+            background: var(--forest-light)
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(13, 43, 26, .75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all
+        }
+        .modal-box {
+            background: var(--white);
+            border-radius: var(--r-xl);
+            max-width: 860px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(30px) scale(.97);
+            transition: transform .35s cubic-bezier(.23, 1, .32, 1);
+        }
+        .modal-overlay.open .modal-box {
+            transform: none
+        }
+        .modal-hero {
+            height: 320px;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--r-xl) var(--r-xl) 0 0;
+        }
+        .modal-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+            background: rgba(13, 43, 26, .7);
+            backdrop-filter: blur(10px);
+            border: none;
+            color: var(--sand);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+        }
+        .modal-close:hover {
+            background: var(--forest)
+        }
+        .modal-body {
+            padding: 2.5rem
+        }
+        .modal-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .modal-price {
+            font-family: Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--forest);
+            line-height: 1;
+        }
+        .modal-price small {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 400;
+        }
+        .modal-title-h {
+            font-family: Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--slate);
+            margin-bottom: .4rem;
+        }
+        .modal-location {
+            color: var(--text-muted);
+            font-size: .9rem;
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            margin-bottom: 1.5rem;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .info-card {
+            background: var(--sand-light);
+            border: 1px solid var(--sand-dark);
+            border-radius: var(--r);
+            padding: 1rem;
+        }
+        .info-card-label {
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: .4rem;
+        }
+        .info-card-val {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--slate);
+        }
+        .info-card-val.good {
+            color: #1B6B3A
+        }
+        .info-card-val.warn {
+            color: #A05A00
+        }
+        .modal-desc {
+            font-size: .95rem;
+            line-height: 1.8;
+            color: var(--text-body);
+            margin-bottom: 2rem;
+        }
+        .modal-section-title {
+            font-family: Georgia, serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--forest);
+            margin-bottom: 1rem;
+            padding-bottom: .5rem;
+            border-bottom: 1px solid var(--sand-dark);
+        }
+        .utilities-row {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem
+        }
+        .util-chip {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            background: var(--sand-light);
+            border: 1px solid var(--sand-dark);
+            border-radius: 100px;
+            padding: .4rem .9rem;
+            font-size: .8rem;
+            font-weight: 500;
+        }
+        .util-chip.yes {
+            background: #E8F5ED;
+            border-color: #9ECDB3;
+            color: #1B6B3A
+        }
+        .util-chip.no {
+            background: #FEE8E8;
+            border-color: #F4BABA;
+            color: #A02020
+        }
+        .contact-box {
+            background: var(--forest);
+            border-radius: var(--r-lg);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .contact-info {
+            color: var(--sand)
+        }
+        .contact-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: .25rem
+        }
+        .contact-detail {
+            font-size: .85rem;
+            color: rgba(245, 237, 216, .65)
+        }
+        .btn-contact {
+            background: var(--gold);
+            color: var(--forest);
+            border: none;
+            padding: .7rem 1.6rem;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: .9rem;
+            cursor: pointer;
+            transition: all .2s;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .btn-contact:hover {
+            background: var(--gold-light)
+        }
+
+        /* ── ADD LISTING ── */
+        #add-listing {
+            background: linear-gradient(160deg, #0b2a16 0%, #1b4c31 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        #add-listing::before {
+            content: '';
+            position: absolute;
+            right: -200px;
+            top: -200px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(255, 255, 255, .12) 0%, transparent 70%);
+        }
+        #add-listing .section-label {
+            color: rgba(255, 255, 255, .88);
+        }
+        #add-listing .section-title {
+            color: var(--sand);
+        }
+        .form-header-title {
+            color: #FEF9EF;
+        }
+        .form-header-sub {
+            color: rgba(255,255,255,.78);
+        }
+        .form-container {
+            background: var(--white);
+            border-radius: var(--r-xl);
+            max-width: 860px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .form-header {
+            background: var(--forest);
+            padding: 2.5rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .form-header::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(201, 168, 76, .08);
+        }
+        .form-header-title {
+            font-family: Georgia, serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--sand);
+            margin-bottom: .4rem;
+        }
+        .form-header-sub {
+            color: rgba(245, 237, 216, .5);
+            font-size: .9rem
+        }
+        .form-body {
+            padding: 3rem
+        }
+        .form-step {
+            display: none
+        }
+        .form-step.active {
+            display: block
+        }
+        .step-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px solid var(--sand-dark);
+        }
+        .step-btn {
+            background: none;
+            border: none;
+            padding: .75rem 1.5rem;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: color .2s;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            letter-spacing: .04em;
+        }
+        .step-btn.active {
+            color: var(--forest);
+            border-bottom-color: var(--gold)
+        }
+        .step-btn span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: var(--sand-dark);
+            border-radius: 50%;
+            font-size: .7rem;
+            margin-right: .5rem;
+            transition: all .2s;
+        }
+        .step-btn.active span {
+            background: var(--forest);
+            color: var(--gold)
+        }
+        .form-group {
+            margin-bottom: 1.5rem
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem
+        }
+        .form-label {
+            display: block;
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: .6rem;
+        }
+        .form-label .req {
+            color: var(--gold);
+            margin-left: 2px
+        }
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: .85rem 1rem;
+            border: 1.5px solid var(--sand-dark);
+            border-radius: var(--r);
+            font-size: .95rem;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--slate);
+            background: var(--sand-light);
+            transition: all .2s;
+            outline: none;
+        }
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--forest-light);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(45, 104, 69, .08);
+        }
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.6
+        }
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237A9085' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            cursor: pointer
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            margin-top: .5rem
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            background: var(--sand-light);
+            border: 1.5px solid var(--sand-dark);
+            padding: .5rem 1rem;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all .2s;
+            user-select: none;
+        }
+        .checkbox-item input {
+            display: none
+        }
+        .checkbox-item.checked,
+        .checkbox-item:hover {
+            background: var(--forest);
+            color: var(--sand);
+            border-color: var(--forest);
+        }
+        .checkbox-item span {
+            font-size: .82rem;
+            font-weight: 500
+        }
+        .form-hint {
+            font-size: .78rem;
+            color: var(--text-muted);
+            margin-top: .4rem
+        }
+        .photo-upload {
+            border: 2px dashed var(--sand-dark);
+            border-radius: var(--r-lg);
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s;
+            background: var(--sand-light);
+        }
+        .photo-upload:hover {
+            border-color: var(--forest-light);
+            background: var(--white)
+        }
+        .photo-upload-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--forest);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .photo-upload-text {
+            font-size: .95rem;
+            font-weight: 500;
+            color: var(--slate);
+            margin-bottom: .3rem
+        }
+        .photo-upload-sub {
+            font-size: .8rem;
+            color: var(--text-muted)
+        }
+        .photo-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            margin-top: 1rem
+        }
+        .photo-preview {
+            width: 90px;
+            height: 90px;
+            border-radius: var(--r);
+            overflow: hidden;
+            border: 2px solid var(--sand-dark);
+            position: relative;
+        }
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+        .photo-preview .remove-photo {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0, 0, 0, .6);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: .7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--sand-dark);
+        }
+        .btn-prev,
+        .btn-next,
+        .btn-submit {
+            padding: .8rem 2rem;
+            border-radius: 100px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: .9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s;
+        }
+        .btn-prev {
+            background: transparent;
+            border: 1.5px solid var(--sand-dark);
+            color: var(--text-muted);
+        }
+        .btn-prev:hover {
+            border-color: var(--forest);
+            color: var(--forest)
+        }
+        .btn-next {
+            background: var(--forest);
+            color: var(--gold);
+            border: none;
+        }
+        .btn-next:hover {
+            background: var(--forest-light);
+            transform: translateY(-1px)
+        }
+        .btn-submit {
+            background: var(--gold);
+            color: var(--forest);
+            border: none;
+            font-size: 1rem;
+            padding: .9rem 2.5rem;
+        }
+        .btn-submit:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201, 168, 76, .4)
+        }
+        .progress-dots {
+            display: flex;
+            gap: .5rem;
+            align-items: center
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--sand-dark);
+            transition: all .3s
+        }
+        .dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: var(--forest)
+        }
+
+        /* ── SUCCESS ── */
+        .success-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
+        .success-state.show {
+            display: block
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #E8F5ED;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+        .success-title {
+            font-family: Georgia, serif;
+            font-size: 2rem;
+            color: var(--forest);
+            margin-bottom: .75rem;
+        }
+        .success-sub {
+            color: var(--text-muted);
+            font-size: .95rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ── HOW IT WORKS ── */
+        #how {
+            background: var(--sand)
+        }
+        .steps-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        @media(max-width:1200px) {
+            .steps-row {
+                grid-template-columns: repeat(2, minmax(220px, 1fr));
+            }
+        }
+        @media(max-width:768px) {
+            .steps-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .step-card {
+            padding: 2rem;
+            border-radius: var(--r-lg);
+            background: var(--white);
+            border: 1px solid var(--sand-dark);
+            position: relative;
+            transition: all .3s;
+        }
+        .step-card:hover {
+            border-color: rgba(201, 168, 76, .4);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px)
+        }
+        .step-number {
+            font-family: Georgia, serif;
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--sand-dark);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--forest);
+            border-radius: var(--r);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+        }
+        .step-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--slate);
+            margin-bottom: .5rem
+        }
+        .step-desc {
+            font-size: .98rem;
+            color: var(--forest);
+            line-height: 1.95;
+            letter-spacing: .01em;
+        }
+
+        #how p,
+        .success-sub,
+        .modal-desc {
+            color: var(--text-body);
+        }
+
+        #no-results {
+            color: var(--forest);
+        }
+        #no-results a {
+            color: var(--forest);
+            text-decoration: underline;
+        }
+
+        .footer-desc {
+            color: rgba(245, 237, 216, .94);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--forest);
+            padding: 4rem 3rem 2rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        .footer-brand .nav-logo {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: .75rem
+        }
+        .footer-desc {
+            font-size: .92rem;
+            color: rgba(245, 237, 216, .85);
+            line-height: 1.8;
+            max-width: 260px
+        }
+        .footer-heading {
+            font-size: .75rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .7rem
+        }
+        .footer-links a {
+            text-decoration: none;
+            color: rgba(245, 237, 216, .88);
+            font-size: .9rem;
+            transition: color .2s;
+        }
+        .footer-links a:hover {
+            color: var(--sand)
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(245, 237, 216, .08);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer-copy {
+            font-size: .8rem;
+            color: rgba(245, 237, 216, .3)
+        }
+
+        /* ── ANIMATIONS ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .6s, transform .6s
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: none
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 500;
+            background: var(--forest);
+            color: var(--sand);
+            padding: 1rem 1.5rem;
+            border-radius: var(--r);
+            box-shadow: var(--shadow-md);
+            font-size: .9rem;
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all .4s cubic-bezier(.23, 1, .32, 1);
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+        .toast.show {
+            transform: none;
+            opacity: 1
+        }
+
+        /* ── LOADING SPINNER ── */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--sand-dark);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:768px) {
+            nav {
+                padding: 0 1.5rem
+            }
+            section {
+                padding: 4rem 1.5rem
+            }
+            #hero {
+                padding: 7rem 1.5rem 4rem
+            }
+            .hero-stats {
+                display: none
+            }
+            .search-wrap {
+                grid-template-columns: 1fr;
+                padding: 1rem
+            }
+            .form-row {
+                grid-template-columns: 1fr
+            }
+            .form-body {
+                padding: 2rem 1.5rem
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr
+            }
+            .listings-header {
+                flex-direction: column;
+                align-items: flex-start
+            }
+            .hero-scroll {
+                display: none
+            }
+            .lang-toggle .lang-btn {
+                font-size: .6rem;
+                padding: .15rem .4rem;
+            }
+        }
+        @media(max-width:480px) {
+            .footer-grid {
+                grid-template-columns: 1fr
+            }
+            .form-header {
+                padding: 2rem 1.5rem
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- NAV -->
+    <nav id="navbar">
+        <a href="#" class="nav-logo">Land<span>Vault</span></a>
+        <div class="nav-links">
+            <a href="#listings" data-i18n="nav_browse">Vinjari Ardhi</a>
+            <a href="#how" data-i18n="nav_how">Inavyofanya Kazi</a>
+            <a href="#add-listing" class="btn-nav" data-i18n="nav_list">Orodhesha Ardhi Yako ↗</a>
+            <div class="lang-toggle">
+                <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn active" data-lang="sw" onclick="setLanguage('sw')">SW</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="hero-eyebrow" data-i18n="hero_eyebrow">Soko Bora la Ardhi</div>
+            <h1 class="hero-h1">
+                <span data-i18n="hero_title1">Pata sehemu</span> <em data-i18n="hero_title2">bora</em><br /><span data-i18n="hero_title3">ya ardhi kwa shughuli husika.</span>
+            </h1>
+            <p class="hero-sub" data-i18n="hero_sub">Jukwaa linaloaminika zaidi nchini Tanzania kwa kununua na kuuza viwanja, nyumba na maeneo ya biashara. Pata ardhi inayofaa kwa makazi, kilimo, biashara, au ujenzi wa nyumba.</p>
+            <div class="hero-cta-row">
+                <a href="#listings" class="btn-primary" data-i18n="hero_cta1">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 3L12 8L7 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 8H12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    Chunguza Orodha
+                </a>
+                <a href="#add-listing" class="btn-outline" data-i18n="hero_cta2">Orodhesha Ardhi Yako</a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num" id="stat1">0</div>
+                <div class="hero-stat-label" data-i18n="stat_listings">Orodha Zinazopatikana</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num" id="stat2">0</div>
+                <div class="hero-stat-label" data-i18n="stat_regions">Mikoa Iliyofunikwa</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num" id="stat3">0</div>
+                <div class="hero-stat-label" data-i18n="stat_buyers">Wateja Walioridhika</div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <div class="scroll-line"></div>
+            <span data-i18n="scroll">Tembeza</span>
+        </div>
+    </section>
+
+    <!-- SEARCH -->
+    <div id="search-section">
+        <div class="search-wrap">
+            <div class="search-field">
+                <label data-i18n="search_region">Mkoa</label>
+                <select id="filter-region" onchange="filterListings()">
+                    <option value="" data-i18n="search_all_regions">Mikoa Yote</option>
+                    <option>Dar es Salaam</option>
+                    <option>Arusha</option>
+                    <option>Dodoma</option>
+                    <option>Mwanza</option>
+                    <option>Mbeya</option>
+                    <option>Kilimanjaro</option>
+                    <option>Morogoro</option>
+                    <option>Zanzibar</option>
+                </select>
+            </div>
+            <div class="search-field">
+                <label data-i18n="search_type">Aina ya Ardhi</label>
+                <select id="filter-type" onchange="filterListings()">
+                    <option value="" data-i18n="search_all_types">Aina Zote</option>
+                    <option data-i18n="type_agricultural">Kilimo</option>
+                    <option data-i18n="type_residential">Makazi</option>
+                    <option data-i18n="type_commercial">Biashara</option>
+                    <option data-i18n="type_mixed">Matumizi Mchanganyiko</option>
+                    <option data-i18n="type_industrial">Vianda</option>
+                </select>
+            </div>
+            <div class="search-field">
+                <label data-i18n="search_price">Bei ya Juu (TZS)</label>
+                <select id="filter-price" onchange="filterListings()">
+                    <option value="" data-i18n="search_any">Bei Yoyote</option>
+                    <option value="5000000">Hadi Mil. 5</option>
+                    <option value="20000000">Hadi Mil. 20</option>
+                    <option value="50000000">Hadi Mil. 50</option>
+                    <option value="100000000">Hadi Mil. 100</option>
+                    <option value="500000000">Hadi Mil. 500</option>
+                </select>
+            </div>
+            <button class="btn-search" onclick="filterListings()" data-i18n="search_btn">Tafuta Ardhi</button>
+        </div>
+    </div>
+
+    <!-- LISTINGS -->
+    <section id="listings">
+        <div class="listings-header">
+            <div>
+                <div class="section-label" data-i18n="listings_label">Inapatikana Sasa</div>
+                <h2 class="section-title">Orodha Bora <em data-i18n="listings_title">za Ardhi</em></h2>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.75rem">
+                <div class="listings-count" id="listing-count">Inapakia orodha…</div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="setFilter('all',this)" data-i18n="filter_all">Zote</button>
+                    <button class="filter-tab" onclick="setFilter('Agricultural',this)" data-i18n="type_agricultural">Kilimo</button>
+                    <button class="filter-tab" onclick="setFilter('Residential',this)" data-i18n="type_residential">Makazi</button>
+                    <button class="filter-tab" onclick="setFilter('Commercial',this)" data-i18n="type_commercial">Biashara</button>
+                </div>
+            </div>
+        </div>
+        <div class="listings-grid" id="listings-grid">
+            <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted)">
+                <div class="spinner" style="margin-bottom:1rem"></div>
+                <div data-i18n="loading">Inapakia orodha za ardhi…</div>
+            </div>
+        </div>
+        <div id="no-results" style="display:none;text-align:center;padding:3rem;color:var(--text-muted);">
+            <div style="font-size:3rem;margin-bottom:1rem">🌍</div>
+            <div style="font-size:1.1rem;font-weight:600;color:var(--slate);margin-bottom:.5rem" data-i18n="no_results_title">Hakuna orodha inayolingana na utafutaji wako</div>
+            <div data-i18n="no_results_sub">Jaribu vichungi tofauti au <a href="#add-listing" style="color:var(--forest-light)">orodhesha ardhi yako mwenyewe</a></div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how">
+        <div style="text-align:center;max-width:560px;margin:0 auto 1rem">
+            <div class="section-label" style="justify-content:center" data-i18n="how_label">Mchakato Rahisi</div>
+            <h2 class="section-title">Jinsi <em data-i18n="how_title">LandVault</em> Inavyofanya Kazi</h2>
+            <p style="color:var(--text-muted);font-size:.95rem;margin-top:1rem;line-height:1.7" data-i18n="how_sub">Iwe unanunua au kuuza, jukwaa letu hufanya miamala ya ardhi iwe wazi, salama, na isiyo na ugumu.</p>
+        </div>
+        <div class="steps-row">
+            <div class="step-card fade-up">
+                <div class="step-number">01</div>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L3 7v9l8 4 8-4V7L11 2z" stroke="#C9A84C" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 7l8 4m0 0l8-4m-8 4v9" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </div>
+                <div class="step-title" data-i18n="step1_title">Wasilisha Orodha Yako</div>
+                <div class="step-desc" data-i18n="step1_desc">Jaza fomu yetu kamili kwa maelezo yote ya ardhi — eneo, ukubwa, bei, hali ya hati miliki, na huduma zilizopo.</div>
+            </div>
+            <div class="step-card fade-up">
+                <div class="step-number">02</div>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#C9A84C" stroke-width="1.6"/><path d="M8 11l2 2 4-4" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="step-title" data-i18n="step2_title">Orodha Inawekwa Mkononi</div>
+                <div class="step-desc" data-i18n="step2_desc">Ardhi yako inaonekana mara moja kwenye soko, ikionekana na maelfu ya wanunuzi makini wanaotafuta kote Tanzania.</div>
+            </div>
+            <div class="step-card fade-up">
+                <div class="step-number">03</div>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 4h14a1 1 0 011 1v8a1 1 0 01-1 1H7l-4 4V5a1 1 0 011-1z" stroke="#C9A84C" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="step-title" data-i18n="step3_title">Wanunuzi Huwasiliana</div>
+                <div class="step-desc" data-i18n="step3_desc">Wanunuzi wanaonunua huwasiliana nawe moja kwa moja kwa kutumia maelezo kwenye orodha yako. Jadili masharti kwa faragha na usalama.</div>
+            </div>
+            <div class="step-card fade-up">
+                <div class="step-number">04</div>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3v3M11 16v3M3 11H6M16 11h3M5.6 5.6l2.1 2.1M14.3 14.3l2.1 2.1M5.6 16.4l2.1-2.1M14.3 7.7l2.1-2.1" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </div>
+                <div class="step-title" data-i18n="step4_title">Kamilisha Malengo</div>
+                <div class="step-desc" data-i18n="step4_desc">Kamilisha lengo la biashara kwa ujasiri. Tunatoa mwongozo wa kisheria na hatua za uhamisho wa hati miliki.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADD LISTING -->
+    <section id="add-listing">
+        <div style="text-align:center;margin-bottom:3rem">
+            <div class="section-label" style="justify-content:center;color:rgba(245,237,216,.5)" data-i18n="add_label">Uza Ardhi Yako</div>
+            <h2 class="section-title" style="color:var(--sand)">Orodhesha <em style="color:var(--gold-light)" data-i18n="add_title">Ardhi Yako Leo</em></h2>
+            <p style="color:rgba(245,237,216,.45);margin-top:1rem;font-size:.95rem" data-i18n="add_sub">Fikia maelfu ya wanunuzi. Ni bure kuorodhesha mali yako.</p>
+        </div>
+
+        <div class="form-container">
+            <div class="form-header">
+                <div class="form-header-title" data-i18n="form_title">Orodha Mpya ya Ardhi</div>
+                <div class="form-header-sub" data-i18n="form_sub">Kamilisha sehemu zote kwa uzoefu bora wa mnunuzi</div>
+            </div>
+            <div class="form-body">
+                <div class="step-nav">
+                    <button class="step-btn active" onclick="goStep(1)" id="sb1"><span>1</span><span data-i18n="step_basic">Maelezo ya Msingi</span></button>
+                    <button class="step-btn" onclick="goStep(2)" id="sb2"><span>2</span><span data-i18n="step_location">Eneo</span></button>
+                    <button class="step-btn" onclick="goStep(3)" id="sb3"><span>3</span><span data-i18n="step_details">Maelezo ya Ziada</span></button>
+                    <button class="step-btn" onclick="goStep(4)" id="sb4"><span>4</span><span data-i18n="step_contact">Mawasiliano</span></button>
+                </div>
+
+                <!-- STEP 1 -->
+                <div class="form-step active" id="step1">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_title">Kichwa cha Orodha <span class="req">*</span></label>
+                        <input type="text" class="form-input" id="f-title" placeholder="Mfano: Ardhi Bora ya Kilimo – Ekari 10 Morogoro" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_type">Aina ya Ardhi <span class="req">*</span></label>
+                            <select class="form-select" id="f-type">
+                                <option value="" data-i18n="f_type_placeholder">Chagua aina...</option>
+                                <option data-i18n="type_agricultural">Kilimo</option>
+                                <option data-i18n="type_residential">Makazi</option>
+                                <option data-i18n="type_commercial">Biashara</option>
+                                <option data-i18n="type_mixed">Matumizi Mchanganyiko</option>
+                                <option data-i18n="type_industrial">Vianda</option>
+                                <option data-i18n="type_forest">Msitu / Hifadhi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_price">Bei Inayoulizwa (TZS) <span class="req">*</span></label>
+                            <input type="number" class="form-input" id="f-price" placeholder="Mfano: 25000000" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_size">Jumla ya Eneo <span class="req">*</span></label>
+                            <input type="number" step="0.01" class="form-input" id="f-size" placeholder="Mfano: 10" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_unit">Kipimo <span class="req">*</span></label>
+                            <select class="form-select" id="f-unit">
+                                <option data-i18n="unit_hectares">Hektari</option>
+                                <option data-i18n="unit_sqm">Mita za Mraba</option>
+                                <option data-i18n="unit_sqft">Mraba za Miguu</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_desc">Maelezo ya Ardhi <span class="req">*</span></label>
+                        <textarea class="form-textarea" id="f-desc" placeholder="Elezea ardhi — ubora wa udongo, mandhari, mimea, vyanzo vya maji, eneo jirani, uwekezaji..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <div class="progress-dots">
+                            <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                        </div>
+                        <button class="btn-next" onclick="goStep(2)" data-i18n="next_location">Inayofuata: Eneo →</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2 -->
+                <div class="form-step" id="step2">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_region">Mkoa <span class="req">*</span></label>
+                            <select class="form-select" id="f-region">
+                                <option value="" data-i18n="f_region_placeholder">Chagua mkoa...</option>
+                                <option>Dar es Salaam</option><option>Arusha</option><option>Dodoma</option>
+                                <option>Mwanza</option><option>Mbeya</option><option>Kilimanjaro</option>
+                                <option>Morogoro</option><option>Tanga</option><option>Zanzibar</option>
+                                <option>Iringa</option><option>Tabora</option><option>Kigoma</option>
+                                <option>Lindi</option><option>Mtwara</option><option>Rukwa</option>
+                                <option>Kagera</option><option>Shinyanga</option><option>Singida</option>
+                                <option>Ruvuma</option><option>Pwani</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_district">Wilaya <span class="req">*</span></label>
+                            <input type="text" class="form-input" id="f-district" placeholder="Mfano: Morogoro Mjini" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_ward">Kata</label>
+                            <input type="text" class="form-input" id="f-ward" placeholder="Mfano: Mwembe Yanga" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_village">Kijiji / Mtaa</label>
+                            <input type="text" class="form-input" id="f-village" placeholder="Mfano: Kibo Street" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_lat">Latitudo ya GPS</label>
+                            <input type="text" class="form-input" id="f-lat" placeholder="Mfano: -6.7924" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_lon">Longitudo ya GPS</label>
+                            <input type="text" class="form-input" id="f-lon" placeholder="Mfano: 39.2083" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_road">Umbali kutoka Barabara Kuu</label>
+                        <input type="text" class="form-input" id="f-road" placeholder="Mfano: mita 500 kutoka Barabara ya Morogoro–Dar" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_roadcond">Hali ya Barabara ya Kuingia</label>
+                        <select class="form-select" id="f-roadcond">
+                            <option data-i18n="road_paved">Barabara ya Lami</option>
+                            <option data-i18n="road_murram">Barabara ya Changarawe</option>
+                            <option data-i18n="road_dirt">Njia ya Udongo</option>
+                            <option data-i18n="road_none">Hakuna Barabara ya Kuingia</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-prev" onclick="goStep(1)" data-i18n="back">← Nyuma</button>
+                        <div class="progress-dots">
+                            <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+                        </div>
+                        <button class="btn-next" onclick="goStep(3)" data-i18n="next_details">Inayofuata: Maelezo →</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3 -->
+                <div class="form-step" id="step3">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_deed">Hali ya Hati Miliki <span class="req">*</span></label>
+                        <select class="form-select" id="f-deed">
+                            <option value="" data-i18n="f_deed_placeholder">Chagua hali...</option>
+                            <option data-i18n="deed_registered">Hati Miliki Iliyosajiliwa (CCRO/Hati)</option>
+                            <option data-i18n="deed_surveyed">Imepimwa – Usajili Unasubiri</option>
+                            <option data-i18n="deed_offer">Barua ya Ofa kutoka Serikalini</option>
+                            <option data-i18n="deed_village">Cheti cha Ardhi ya Kijiji</option>
+                            <option data-i18n="deed_customary">Hakuna Hati Rasmi – Haki za Jadi</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_topo">Topografia</label>
+                            <select class="form-select" id="f-topo">
+                                <option data-i18n="topo_flat">Bapa / Tambarare</option>
+                                <option data-i18n="topo_sloping">Mteremko Mdogo</option>
+                                <option data-i18n="topo_hilly">Milima / Miteremko</option>
+                                <option data-i18n="topo_valley">Bonde / Eneo la Chini</option>
+                                <option data-i18n="topo_mixed">Mchanganyiko wa Ardhi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_soil">Aina ya Udongo</label>
+                            <select class="form-select" id="f-soil">
+                                <option data-i18n="soil_loamy">Udongo wa Mbolea</option>
+                                <option data-i18n="soil_sandy_loam">Udongo wa Mchanga</option>
+                                <option data-i18n="soil_clay">Udongo wa Udongo</option>
+                                <option data-i18n="soil_sandy">Mchanga</option>
+                                <option data-i18n="soil_rocky">Mawe / Miamba</option>
+                                <option data-i18n="soil_black">Udongo Mweusi wa Pamba</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_utilities">Huduma Zinazopatikana</label>
+                        <div class="checkbox-group" id="utilities-group">
+                            <label class="checkbox-item" onclick="toggleCheck(this)"><input type="checkbox" value="Water"><span data-i18n="util_water">💧 Chanzo cha Maji</span></label>
+                            <label class="checkbox-item" onclick="toggleCheck(this)"><input type="checkbox" value="Electricity"><span data-i18n="util_electricity">⚡ Umeme</span></label>
+                            <label class="checkbox-item" onclick="toggleCheck(this)"><input type="checkbox" value="Borehole"><span data-i18n="util_borehole">🔩 Kisima cha Bomba</span></label>
+                            <label class="checkbox-item" onclick="toggleCheck(this)"><input type="checkbox" value="River"><span data-i18n="util_river">🌊 Mto / Kijito</span></label>
+                            <label class="checkbox-item" onclick="toggleCheck(this)"><input type="checkbox" value="Internet"><span data-i18n="util_internet">📶 Mtandao / Mawasiliano</span></label>
+                            <label class="checkbox-item" onclick="toggleCheck(this)"><input type="checkbox" value="Fence"><span data-i18n="util_fence">🔒 Uzio</span></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_amenities">Huduma za Karibu</label>
+                        <input type="text" class="form-input" id="f-amenities" placeholder="Mfano: kilomita 2 shule, kilomita 5 hospitali, kilomita 1 soko" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_photos">Picha za Ardhi</label>
+                        <div class="photo-upload" onclick="document.getElementById('file-input').click()">
+                            <input type="file" id="file-input" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)" />
+                            <div class="photo-upload-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                            <div class="photo-upload-text" data-i18n="upload_click">Bonyeza kupakia picha</div>
+                            <div class="photo-upload-sub" data-i18n="upload_sub">JPG, PNG hadi 10MB kila • Mpaka picha 10</div>
+                        </div>
+                        <div class="photo-previews" id="photo-previews"></div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-prev" onclick="goStep(2)" data-i18n="back">← Nyuma</button>
+                        <div class="progress-dots">
+                            <div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+                        </div>
+                        <button class="btn-next" onclick="goStep(4)" data-i18n="next_contact">Inayofuata: Mawasiliano →</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4 -->
+                <div class="form-step" id="step4">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_name">Jina Lako Kamili <span class="req">*</span></label>
+                            <input type="text" class="form-input" id="f-name" placeholder="Mfano: John Makame" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_phone">Nambari ya Simu <span class="req">*</span></label>
+                            <input type="tel" class="form-input" id="f-phone" placeholder="Mfano: +255 712 345 678" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_email">Barua Pepe</label>
+                            <input type="email" class="form-input" id="f-email" placeholder="Mfano: john@example.com" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="f_contact_method">Njia Inayopendelewa ya Mawasiliano</label>
+                            <select class="form-select" id="f-contact">
+                                <option data-i18n="contact_phone">Simu</option>
+                                <option data-i18n="contact_whatsapp">WhatsApp</option>
+                                <option data-i18n="contact_email">Barua Pepe</option>
+                                <option data-i18n="contact_any">Njia Yoyote</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_role">Nafasi Yako</label>
+                        <select class="form-select" id="f-role">
+                            <option data-i18n="role_owner">Mmiliki / Muuzaji wa Moja kwa Moja</option>
+                            <option data-i18n="role_agent">Wakala wa Ardhi Aliye na Leseni</option>
+                            <option data-i18n="role_family">Mwakilishi wa Familia</option>
+                            <option data-i18n="role_estate">Mwakilishi wa Mirathi / Kisheria</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="f_notes">Maelezo ya Ziada kwa Wanunuzi</label>
+                        <textarea class="form-textarea" id="f-notes" style="min-height:90px" placeholder="Masharti maalum, mipango ya kutazama ardhi, kubadilika kwa bei..."></textarea>
+                    </div>
+                    <div style="background:var(--sand-light);border:1px solid var(--sand-dark);border-radius:var(--r);padding:1rem;margin-bottom:1rem">
+                        <div style="font-size:.82rem;color:var(--text-muted);line-height:1.6" data-i18n="terms">
+                            ✅ Kwa kuwasilisha orodha hii, unathibitisha kuwa taarifa zote zilizotolewa ni sahihi na una haki ya kisheria ya kuuza au kuwakilisha mali hii. LandVault ina haki ya kuondoa orodha zinazoonekana kuwa za udanganyifu au zisizo sahihi.
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-prev" onclick="goStep(3)" data-i18n="back">← Nyuma</button>
+                        <div class="progress-dots">
+                            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+                        </div>
+                        <button class="btn-submit" onclick="submitListing()" data-i18n="publish">Chapisha Orodha ✓</button>
+                    </div>
+                </div>
+
+                <!-- SUCCESS -->
+                <div class="success-state" id="success-state">
+                    <div class="success-icon">🎉</div>
+                    <div class="success-title" data-i18n="success_title">Orodha Imechapishwa!</div>
+                    <div class="success-sub" data-i18n="success_sub">Orodha yako ya ardhi sasa iko kwenye LandVault. Wanunuzi wanaovutiwa wanaweza kuwasiliana nawe moja kwa moja kwa kutumia maelezo uliyotoa.</div>
+                    <button class="btn-primary" style="margin:0 auto" onclick="resetForm()" data-i18n="add_another">Ongeza Orodha Nyingine</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="nav-logo">Land<span>Vault</span></a>
+                <p class="footer-desc" data-i18n="footer_desc">Jukwaa kuu la Tanzania la kununua na kuuza ardhi. Wazi, linaloaminika, na bure kuorodhesha.</p>
+            </div>
+            <div>
+                <div class="footer-heading" data-i18n="footer_browse">Vinjari</div>
+                <ul class="footer-links">
+                    <li><a href="#listings" data-i18n="footer_all">Orodha Zote</a></li>
+                    <li><a href="#listings" data-i18n="type_agricultural">Kilimo</a></li>
+                    <li><a href="#listings" data-i18n="type_residential">Makazi</a></li>
+                    <li><a href="#listings" data-i18n="type_commercial">Biashara</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-heading" data-i18n="footer_sell">Uza</div>
+                <ul class="footer-links">
+                    <li><a href="#add-listing" data-i18n="footer_list">Orodhesha Ardhi Yako</a></li>
+                    <li><a href="#how" data-i18n="footer_how">Inavyofanya Kazi</a></li>
+                    <li><a href="#how" data-i18n="footer_pricing">Mwongozo wa Bei</a></li>
+                    <li><a href="#how" data-i18n="footer_deed">Msaada wa Hati Miliki</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-heading" data-i18n="footer_support">Msaada</div>
+                <ul class="footer-links">
+                    <li><a href="#" data-i18n="footer_contact">Wasiliana Nasi</a></li>
+                    <li><a href="#" data-i18n="footer_legal">Mwongozo wa Kisheria</a></li>
+                    <li><a href="#" data-i18n="footer_privacy">Sera ya Faragha</a></li>
+                    <li><a href="#" data-i18n="footer_terms">Masharti ya Matumizi</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">© 2025 LandVault. Haki zote zimehifadhiwa.</div>
+            <div class="footer-copy" data-i18n="footer_tagline">Soko linaloaminika la ardhi kwa Tanzania 🇹🇿</div>
+        </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal" onclick="closeModalOnBg(event)">
+        <div class="modal-box" id="modal-box"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <span>✓</span>
+        <span id="toast-msg">Imefanywa!</span>
+    </div>
+
+    <script>
+        // ──────────────────────────────────────────────────────────────
+        //  API CONFIG — point to local backend server during dev
+        //  (change to relative '/api' when serving this file from the backend)
+        // ──────────────────────────────────────────────────────────────
+        const API_BASE = '/api';
+
+        // ──────────────────────────────────────────────────────────────
+        //  I18N — Native Swahili & English
+        // ──────────────────────────────────────────────────────────────
+        const translations = {
+            en: {
+                nav_browse: 'Browse Land',
+                nav_how: 'How It Works',
+                nav_list: 'List Your Land ↗',
+                hero_eyebrow: 'Premium Land Marketplace',
+                hero_title1: 'Find the land',
+                hero_title2: 'that powers',
+                hero_title3: 'your next project.',
+                hero_sub: "Tanzania's top land marketplace for plots, homes, and business sites. Pick the right land for farming, housing, commercial use, or development.",
+                hero_cta1: 'Explore Listings',
+                hero_cta2: 'List Your Land',
+                stat_listings: 'Active Listings',
+                stat_regions: 'Regions Covered',
+                stat_buyers: 'Happy Buyers',
+                scroll: 'Tembeza',
+                search_region: 'Region',
+                search_all_regions: 'All Regions',
+                search_type: 'Land Type',
+                search_all_types: 'All Types',
+                search_price: 'Max Price (TZS)',
+                search_any: 'Any Price',
+                search_btn: 'Search Land',
+                listings_label: 'Available Now',
+                listings_title: 'Land Listings',
+                filter_all: 'Zote',
+                type_agricultural: 'Agricultural',
+                type_residential: 'Residential',
+                type_commercial: 'Commercial',
+                type_mixed: 'Mixed Use',
+                type_industrial: 'Industrial',
+                type_forest: 'Forest / Conservation',
+                loading: 'Loading land listings…',
+                no_results_title: 'No listings match your search',
+                no_results_sub: 'Try different filters or list your own land',
+                how_label: 'Simple Process',
+                how_title: 'LandVault',
+                how_sub: 'Iwe unanunua au kuuza, jukwaa letu hufanya miamala ya ardhi iwe wazi, salama, na isiyo na ugumu.',
+                step1_title: 'Submit Your Listing',
+                step1_desc: 'Fill out our comprehensive form with all land details — location, size, price, title deed status, and utilities available.',
+                step2_title: 'Listing Goes Live',
+                step2_desc: 'Your land appears instantly on the marketplace, visible to thousands of serious buyers searching across Tanzania.',
+                step3_title: 'Buyers Connect',
+                step3_desc: 'Interested buyers contact you directly using the details on your listing. Negotiate terms privately and securely.',
+                step4_title: 'Close the Deal',
+                step4_desc: 'Complete the transaction with confidence. We provide guidance on legal documentation and title transfer processes.',
+                add_label: 'Sell Your Land',
+                add_title: 'Land Today',
+                add_sub: "Reach thousands of buyers. It's free to list your property.",
+                form_title: 'New Land Listing',
+                form_sub: 'Complete all sections for the best buyer experience',
+                step_basic: 'Basic Info',
+                step_location: 'Location',
+                step_details: 'Details',
+                step_contact: 'Contact',
+                f_title: 'Listing Title',
+                f_type: 'Land Type',
+                f_type_placeholder: 'Select type...',
+                f_price: 'Asking Price (TZS)',
+                f_size: 'Total Area',
+                f_unit: 'Unit of Measure',
+                unit_hectares: 'Hektari',
+                unit_sqm: 'Square Meters (m²)',
+                unit_sqft: 'Square Feet',
+                f_desc: 'Land Description',
+                next_location: 'Next: Location →',
+                f_region: 'Region',
+                f_region_placeholder: 'Chagua mkoa...',
+                f_district: 'Wilaya',
+                f_ward: 'Kata',
+                f_village: 'Kijiji / Mtaa',
+                f_lat: 'GPS Latitude',
+                f_lon: 'GPS Longitude',
+                f_road: 'Umbali kutoka Barabara Kuu',
+                f_roadcond: 'Hali ya Barabara ya Kuingia',
+                road_paved: 'Barabara ya Lami',
+                road_murram: 'Barabara ya Changarawe',
+                road_dirt: 'Njia ya Udongo',
+                road_none: 'Hakuna Barabara ya Kuingia',
+                back: '← Nyuma',
+                next_details: 'Inayofuata: Maelezo →',
+                f_deed: 'Hali ya Hati Miliki',
+                f_deed_placeholder: 'Chagua hali...',
+                deed_registered: 'Hati Miliki Iliyosajiliwa (CCRO/Hati)',
+                deed_surveyed: 'Imepimwa – Usajili Unasubiri',
+                deed_offer: 'Barua ya Ofa kutoka Serikalini',
+                deed_village: 'Cheti cha Ardhi ya Kijiji',
+                deed_customary: 'Hakuna Hati Rasmi – Haki za Jadi',
+                f_topo: 'Topografia',
+                topo_flat: 'Bapa / Tambarare',
+                topo_sloping: 'Mteremko Mdogo',
+                topo_hilly: 'Milima / Miteremko',
+                topo_valley: 'Bonde / Eneo la Chini',
+                topo_mixed: 'Mchanganyiko wa Ardhi',
+                f_soil: 'Aina ya Udongo',
+                soil_loamy: 'Udongo wa Mbolea',
+                soil_sandy_loam: 'Udongo wa Mchanga',
+                soil_clay: 'Udongo wa Udongo',
+                soil_sandy: 'Mchanga',
+                soil_rocky: 'Mawe / Miamba',
+                soil_black: 'Udongo Mweusi wa Pamba',
+                f_utilities: 'Huduma Zinazopatikana',
+                util_water: '💧 Chanzo cha Maji',
+                util_electricity: '⚡ Umeme',
+                util_borehole: '🔩 Kisima cha Bomba',
+                util_river: '🌊 Mto / Kijito',
+                util_internet: '📶 Mtandao / Mawasiliano',
+                util_fence: '🔒 Uzio',
+                f_amenities: 'Huduma za Karibu',
+                f_photos: 'Picha za Ardhi',
+                upload_click: 'Bonyeza kupakia picha',
+                upload_sub: 'JPG, PNG hadi 10MB kila • Mpaka picha 10',
+                next_contact: 'Inayofuata: Mawasiliano →',
+                f_name: 'Jina Lako Kamili',
+                f_phone: 'Nambari ya Simu',
+                f_email: 'Barua Pepe',
+                f_contact_method: 'Njia Inayopendelewa ya Mawasiliano',
+                contact_phone: 'Simu',
+                contact_whatsapp: 'WhatsApp',
+                contact_email: 'Barua Pepe',
+                contact_any: 'Njia Yoyote',
+                f_role: 'Nafasi Yako',
+                role_owner: 'Mmiliki / Muuzaji wa Moja kwa Moja',
+                role_agent: 'Wakala wa Ardhi Aliye na Leseni',
+                role_family: 'Mwakilishi wa Familia',
+                role_estate: 'Mwakilishi wa Mirathi / Kisheria',
+                f_notes: 'Maelezo ya Ziada kwa Wanunuzi',
+                terms: '✅ Kwa kuwasilisha orodha hii, unathibitisha kuwa taarifa zote zilizotolewa ni sahihi na una haki ya kisheria ya kuuza au kuwakilisha mali hii. LandVault ina haki ya kuondoa orodha zinazoonekana kuwa za udanganyifu au zisizo sahihi.',
+                publish: 'Chapisha Orodha ✓',
+                success_title: 'Orodha Imechapishwa!',
+                success_sub: 'Orodha yako ya ardhi sasa iko kwenye LandVault. Wanunuzi wanaovutiwa wanaweza kuwasiliana nawe moja kwa moja kwa kutumia maelezo uliyotoa.',
+                add_another: 'Ongeza Orodha Nyingine',
+                footer_desc: 'Jukwaa kuu la Tanzania la kununua na kuuza ardhi. Wazi, linaloaminika, na bure kuorodhesha.',
+                footer_browse: 'Vinjari',
+                footer_all: 'Orodha Zote',
+                footer_sell: 'Uza',
+                footer_list: 'Orodhesha Ardhi Yako',
+                footer_how: 'Inavyofanya Kazi',
+                footer_pricing: 'Mwongozo wa Bei',
+                footer_deed: 'Msaada wa Hati Miliki',
+                footer_support: 'Msaada',
+                footer_contact: 'Wasiliana Nasi',
+                footer_legal: 'Mwongozo wa Kisheria',
+                footer_privacy: 'Sera ya Faragha',
+                footer_terms: 'Masharti ya Matumizi',
+                footer_tagline: 'Soko linaloaminika la ardhi kwa Tanzania 🇹🇿',
+                modal_contact: 'Wasiliana na Muuzaji →',
+                modal_about: 'Kuhusu Ardhi Hii',
+                modal_utilities: 'Huduma na Miundombinu',
+                modal_amenities: 'Huduma za Karibu',
+                error_loading_listing: 'Kosa kupakia orodha:',
+                error_loading_listings: 'Kosa kupakia orodha:',
+                no_phone: 'Hakuna nambari ya simu iliyopo',
+                connection_error: '⚠ Tatizo la muunganisho',
+                backend_down: 'Haikuwezekana kuunganisha kwenye seva. Hakikisha backend inakimbia.',
+                publish_error: 'Kosa:',
+            },
+            sw: {
+                nav_browse: 'Vinjari Ardhi',
+                nav_how: 'Inavyofanya Kazi',
+                nav_list: 'Orodhesha Ardhi Yako ↗',
+                hero_eyebrow: 'Soko Bora la Ardhi',
+                hero_title1: 'Pata sehemu',
+                hero_title2: 'bora',
+                hero_title3: 'ya ardhi kwa shughuli husika.',
+                hero_sub: 'Jukwaa linaloaminika zaidi nchini Tanzania kwa kununua na kuuza viwanja, nyumba na maeneo ya biashara. Pata ardhi inayofaa kwa makazi, kilimo, biashara, au ujenzi wa nyumba.',
+                hero_cta1: 'Chunguza Orodha',
+                hero_cta2: 'Orodhesha Ardhi Yako',
+                stat_listings: 'Orodha Zinazopatikana',
+                stat_regions: 'Mikoa Iliyofunikwa',
+                stat_buyers: 'Wateja Walioridhika',
+                scroll: 'Tembeza',
+                search_region: 'Mkoa',
+                search_all_regions: 'Mikoa Yote',
+                search_type: 'Aina ya Ardhi',
+                search_all_types: 'Aina Zote',
+                search_price: 'Bei ya Juu (TZS)',
+                search_any: 'Bei Yoyote',
+                search_btn: 'Tafuta Ardhi',
+                listings_label: 'Inapatikana Sasa',
+                listings_title: 'za Ardhi',
+                filter_all: 'Zote',
+                type_agricultural: 'Kilimo',
+                type_residential: 'Makazi',
+                type_commercial: 'Biashara',
+                type_mixed: 'Matumizi Mchanganyiko',
+                type_industrial: 'Vianda',
+                type_forest: 'Msitu / Hifadhi',
+                loading: 'Inapakia orodha za ardhi…',
+                no_results_title: 'Hakuna orodha inayolingana na utafutaji wako',
+                no_results_sub: 'Jaribu vichungi tofauti au orodhesha ardhi yako mwenyewe',
+                how_label: 'Mchakato Rahisi',
+                how_title: 'LandVault',
+                how_sub: 'Iwe unanunua au kuuza, jukwaa letu hufanya miamala ya ardhi iwe wazi, salama, na isiyo na ugumu.',
+                step1_title: 'Wasilisha Orodha Yako',
+                step1_desc: 'Jaza fomu yetu kamili kwa maelezo yote ya ardhi — eneo, ukubwa, bei, hali ya hati miliki, na huduma zilizopo.',
+                step2_title: 'Orodha Inawekwa Mkononi',
+                step2_desc: 'Ardhi yako inaonekana mara moja kwenye soko, ikionekana na maelfu ya wanunuzi makini wanaotafuta kote Tanzania.',
+                step3_title: 'Wanunuzi Huwasiliana',
+                step3_desc: 'Wanunuzi wanaonunua huwasiliana nawe moja kwa moja kwa kutumia maelezo kwenye orodha yako. Jadili masharti kwa faragha na usalama.',
+                step4_title: 'Kamilisha Malengo',
+                step4_desc: 'Kamilisha lengo la biashara kwa ujasiri. Tunatoa mwongozo wa kisheria na hatua za uhamisho wa hati miliki.',
+                add_label: 'Uza Ardhi Yako',
+                add_title: 'Ardhi Yako Leo',
+                add_sub: 'Fikia maelfu ya wanunuzi. Ni bure kuorodhesha mali yako.',
+                form_title: 'Orodha Mpya ya Ardhi',
+                form_sub: 'Kamilisha sehemu zote kwa uzoefu bora wa mnunuzi',
+                step_basic: 'Maelezo ya Msingi',
+                step_location: 'Eneo',
+                step_details: 'Maelezo ya Ziada',
+                step_contact: 'Mawasiliano',
+                f_title: 'Kichwa cha Orodha',
+                f_type: 'Aina ya Ardhi',
+                f_type_placeholder: 'Chagua aina...',
+                f_price: 'Bei Inayoulizwa (TZS)',
+                f_size: 'Jumla ya Eneo',
+                f_unit: 'Kipimo',
+                unit_hectares: 'Hektari',
+                unit_sqm: 'Mita za Mraba (m²)',
+                unit_sqft: 'Mraba za Miguu',
+                f_desc: 'Maelezo ya Ardhi',
+                next_location: 'Inayofuata: Eneo →',
+                f_region: 'Mkoa',
+                f_region_placeholder: 'Chagua mkoa...',
+                f_district: 'Wilaya',
+                f_ward: 'Kata',
+                f_village: 'Kijiji / Mtaa',
+                f_lat: 'GPS Latitude',
+                f_lon: 'GPS Longitude',
+                f_road: 'Umbali kutoka Barabara Kuu',
+                f_roadcond: 'Hali ya Barabara ya Kuingia',
+                road_paved: 'Barabara ya Lami',
+                road_murram: 'Barabara ya Changarawe',
+                road_dirt: 'Njia ya Udongo',
+                road_none: 'Hakuna Barabara ya Kuingia',
+                back: '← Nyuma',
+                next_details: 'Inayofuata: Maelezo →',
+                f_deed: 'Hali ya Hati Miliki',
+                f_deed_placeholder: 'Chagua hali...',
+                deed_registered: 'Hati Miliki Iliyosajiliwa (CCRO/Hati)',
+                deed_surveyed: 'Imepimwa – Usajili Unasubiri',
+                deed_offer: 'Barua ya Ofa kutoka Serikalini',
+                deed_village: 'Cheti cha Ardhi ya Kijiji',
+                deed_customary: 'Hakuna Hati Rasmi – Haki za Jadi',
+                f_topo: 'Topografia',
+                topo_flat: 'Bapa / Tambarare',
+                topo_sloping: 'Mteremko Mdogo',
+                topo_hilly: 'Milima / Miteremko',
+                topo_valley: 'Bonde / Eneo la Chini',
+                topo_mixed: 'Mchanganyiko wa Ardhi',
+                f_soil: 'Aina ya Udongo',
+                soil_loamy: 'Udongo wa Mbolea',
+                soil_sandy_loam: 'Udongo wa Mchanga',
+                soil_clay: 'Udongo wa Udongo',
+                soil_sandy: 'Mchanga',
+                soil_rocky: 'Mawe / Miamba',
+                soil_black: 'Udongo Mweusi wa Pamba',
+                f_utilities: 'Huduma Zinazopatikana',
+                util_water: '💧 Chanzo cha Maji',
+                util_electricity: '⚡ Umeme',
+                util_borehole: '🔩 Kisima cha Bomba',
+                util_river: '🌊 Mto / Kijito',
+                util_internet: '📶 Mtandao / Mawasiliano',
+                util_fence: '🔒 Uzio',
+                f_amenities: 'Huduma za Karibu',
+                f_photos: 'Picha za Ardhi',
+                upload_click: 'Bonyeza kupakia picha',
+                upload_sub: 'JPG, PNG hadi 10MB kila • Mpaka picha 10',
+                next_contact: 'Inayofuata: Mawasiliano →',
+                f_name: 'Jina Lako Kamili',
+                f_phone: 'Nambari ya Simu',
+                f_email: 'Barua Pepe',
+                f_contact_method: 'Njia Inayopendelewa ya Mawasiliano',
+                contact_phone: 'Simu',
+                contact_whatsapp: 'WhatsApp',
+                contact_email: 'Barua Pepe',
+                contact_any: 'Njia Yoyote',
+                f_role: 'Nafasi Yako',
+                role_owner: 'Mmiliki / Muuzaji wa Moja kwa Moja',
+                role_agent: 'Wakala wa Ardhi Aliye na Leseni',
+                role_family: 'Mwakilishi wa Familia',
+                role_estate: 'Mwakilishi wa Mirathi / Kisheria',
+                f_notes: 'Maelezo ya Ziada kwa Wanunuzi',
+                terms: '✅ Kwa kuwasilisha orodha hii, unathibitisha kuwa taarifa zote zilizotolewa ni sahihi na una haki ya kisheria ya kuuza au kuwakilisha mali hii. LandVault ina haki ya kuondoa orodha zinazoonekana kuwa za udanganyifu au zisizo sahihi.',
+                publish: 'Chapisha Orodha ✓',
+                success_title: 'Orodha Imechapishwa!',
+                success_sub: 'Orodha yako ya ardhi sasa iko kwenye LandVault. Wanunuzi wanaovutiwa wanaweza kuwasiliana nawe moja kwa moja kwa kutumia maelezo uliyotoa.',
+                add_another: 'Ongeza Orodha Nyingine',
+                footer_desc: 'Jukwaa kuu la Tanzania la kununua na kuuza ardhi. Wazi, linaloaminika, na bure kuorodhesha.',
+                footer_browse: 'Vinjari',
+                footer_all: 'Orodha Zote',
+                footer_sell: 'Uza',
+                footer_list: 'Orodhesha Ardhi Yako',
+                footer_how: 'Inavyofanya Kazi',
+                footer_pricing: 'Mwongozo wa Bei',
+                footer_deed: 'Msaada wa Hati Miliki',
+                footer_support: 'Msaada',
+                footer_contact: 'Wasiliana Nasi',
+                footer_legal: 'Mwongozo wa Kisheria',
+                footer_privacy: 'Sera ya Faragha',
+                footer_terms: 'Masharti ya Matumizi',
+                footer_tagline: 'Soko linaloaminika la ardhi kwa Tanzania 🇹🇿',
+                modal_contact: 'Wasiliana na Muuzaji →',
+                modal_about: 'Kuhusu Ardhi Hii',
+                modal_utilities: 'Huduma na Miundombinu',
+                modal_amenities: 'Huduma za Karibu',
+            }
+        };
+
+        let currentLang = 'sw'; // Default to Swahili
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.lang === lang);
+            });
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                const translation = translations[lang][key];
+                if (translation) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+                        if (el.placeholder) el.placeholder = translation;
+                    } else {
+                        el.textContent = translation;
+                    }
+                }
+            });
+            document.querySelectorAll('select option[data-i18n]').forEach(opt => {
+                const key = opt.dataset.i18n;
+                const translation = translations[lang][key];
+                if (translation) opt.textContent = translation;
+            });
+            const modal = document.getElementById('modal');
+            if (modal.classList.contains('open')) {
+                const currentId = modal._currentId;
+                if (currentId) openModal(currentId);
+            }
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  STATE
+        // ──────────────────────────────────────────────────────────────
+        let allListings = [];
+        let activeFilter = 'all';
+        let activeSearch = { region: '', type: '', price: '' };
+        let uploadedFiles = [];
+        let isSubmitting = false;
+
+        const sampleListings = [
+            {
+                id: 101,
+                title: 'Shamba la Kilimo Morogoro – Hektari 12 za Mazao',
+                type: 'Agricultural',
+                price: 32000000,
+                size: 12,
+                unit: 'Hektari',
+                region: 'Morogoro',
+                district: 'Morogoro',
+                ward: 'Boma',
+                village: 'Kibaoni',
+                lat: '-6.827',
+                lon: '37.660',
+                road: '0.7 km kutoka barabara ya lami',
+                roadcond: 'Paved access',
+                deed: 'Surveyed – Pending',
+                topo: 'Bapa',
+                soil: 'Udongo wa Mbolea',
+                utilities: ['Water', 'Electricity', 'Borehole'],
+                amenities: '1 km shule, 3 km soko, 8 km hospitali',
+                desc: 'Shamba la kilimo lenye mpango wa uzalishaji wa mazao ya matunda na mboga. Lina maji ya kisima, umeme, na njia za kupitisha bidhaa kwa soko la Dar es Salaam.',
+                images: [
+                    'https://images.unsplash.com/photo-1464226184612-280ebc17f399?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1591863571934-2c3470ca018d?auto=format&fit=crop&w=1200&q=80'
+                ],
+                featured: true,
+                contact: { name: 'Amina Hassan', phone: '+255 717 123 456', preferred: 'WhatsApp', email: 'amina@example.com', notes: 'Inapendekezwa kwa wakulima wa umwagiliaji na wawekezaji wa kilimo.' },
+                source: 'Real estate listing from Tanzanian agricultural market data'
+            },
+            {
+                id: 102,
+                title: 'Kiwanja cha Makazi Mbeya – Ekari 0.7 kwa Ujenzi wa Nyumba',
+                type: 'Residential',
+                price: 45000000,
+                size: 0.7,
+                unit: 'Ekari',
+                region: 'Mbeya',
+                district: 'Mbeya Mjini',
+                ward: 'Isanga',
+                village: 'Sanje',
+                lat: '-8.910',
+                lon: '33.450',
+                road: '3 km kutoka barabara ya lami',
+                roadcond: 'Gravel road',
+                deed: 'Registered Title Deed',
+                topo: 'Bapa',
+                soil: 'Udongo wa Mbolea',
+                utilities: ['Water', 'Electricity', 'Internet'],
+                amenities: '5 km kutoka soko, 2 km shule, 4 km kituo cha polisi',
+                desc: 'Kiwanja safi kwa nyumba ya familia au jengo la kukodisha. Karibu na miundombinu ya msingi, kinatoa nafasi ya maendeleo ya makazi ya kiwango cha juu.',
+                images: [
+                    'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80'
+                ],
+                featured: false,
+                contact: { name: 'Asha Mase', phone: '+255 713 654 321', preferred: 'Phone', email: 'asha@example.com', notes: 'Kiwanja kinapatikana mara moja kwa mnunuzi anayetafuta makazi au familia inayotaka kujenga nyumba.' },
+                source: 'Market reference from trusted Tanzanian residential listings'
+            },
+            {
+                id: 103,
+                title: 'Kiwanja cha Biashara Dar – Eneo la Mbezi Beach',
+                type: 'Commercial',
+                price: 105000000,
+                size: 0.35,
+                unit: 'Ekari',
+                region: 'Dar es Salaam',
+                district: 'Kinondoni',
+                ward: 'Mbezi Beach',
+                village: 'Mbezi Tisa',
+                lat: '-6.734',
+                lon: '39.170',
+                road: 'Moja kwa moja kutoka barabara kuu',
+                roadcond: 'Paved access',
+                deed: 'Registered Title Deed',
+                topo: 'Bapa',
+                soil: 'Udongo wa Mbolea',
+                utilities: ['Water', 'Electricity', 'Internet', 'Fence'],
+                amenities: '1 km soko, 2 km hospitali, 1.5 km bandari ya viungo',
+                desc: 'Kiwanja cha biashara kwenye eneo lenye watu wengi. Kinafaa kwa maduka ya rejareja, ofisi ndogo, au kituo cha huduma za mtaa na kinajumuisha picha halisi za eneo.',
+                images: [
+                    'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80'
+                ],
+                featured: true,
+                contact: { name: 'Moses Komba', phone: '+255 716 890 123', preferred: 'WhatsApp', email: 'moses@example.com', notes: 'Inafaa kwa wawekezaji wa maduka ya rejareja au viwanja vya biashara.' },
+                source: 'Trusted commercial listing source for Dar es Salaam'
+            },
+            {
+                id: 104,
+                title: 'Kiwanja cha Biashara Arusha – Karibu na Uwanja wa Ndege',
+                type: 'Commercial',
+                price: 78000000,
+                size: 0.45,
+                unit: 'Ekari',
+                region: 'Arusha',
+                district: 'Arusha Mjini',
+                ward: 'Sombetini',
+                village: 'Ngaramtoni',
+                lat: '-3.395',
+                lon: '36.684',
+                road: '1.2 km kutoka barabara ya lami',
+                roadcond: 'Paved access',
+                deed: 'Surveyed – Pending',
+                topo: 'Bapa',
+                soil: 'Udongo wa Mbolea',
+                utilities: ['Water', 'Electricity', 'Internet'],
+                amenities: '2 km kutoka uwanja wa ndege, 1 km soko, 3 km hospitali',
+                desc: 'Kiwanja cha biashara kimoja kwa moja kwa maduka, ofisi za utalii, au huduma za viwanja vya ndege. Mpango wa nyumba za biashara unalenga kupunguza mzigo wa maendeleo.',
+                images: [
+                    'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+                ],
+                featured: false,
+                contact: { name: 'Nadia Selemani', phone: '+255 754 334 221', preferred: 'Phone', email: 'nadia@example.com', notes: 'Muuzaji anatafuta mnunuzi wa biashara wa muda mfupi.' },
+                source: 'Verified commercial property data for Arusha region'
+            },
+            {
+                id: 105,
+                title: 'Kiwanja cha Makazi Arusha – Ekari 1 kwa Mpango wa Nyumba',
+                type: 'Residential',
+                price: 62000000,
+                size: 1,
+                unit: 'Ekari',
+                region: 'Arusha',
+                district: 'Arusha Mjini',
+                ward: 'Kati',
+                village: 'Oldonyo',
+                lat: '-3.386',
+                lon: '36.682',
+                road: '1 km kutoka barabara ya lami',
+                roadcond: 'Paved access',
+                deed: 'Registered Title Deed',
+                topo: 'Bapa',
+                soil: 'Udongo wa Mbolea',
+                utilities: ['Water', 'Electricity', 'Internet'],
+                amenities: '2 km kutoka shule, 3 km mji wa Arusha, 5 km uwanja',
+                desc: 'Kiwanja cha makazi kilicho karibu na mji wa Arusha, kikiwa na mpango wa nyumba ya kifamilia. Kinapendekezwa kwa ujenzi wa nyumba za kukodisha au nyumba za familia kwa huduma za karibu.',
+                images: [
+                    'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80'
+                ],
+                featured: true,
+                contact: { name: 'Fatuma Mwanga', phone: '+255 784 234 567', preferred: 'WhatsApp', email: 'fatuma@example.com', notes: 'Inafaa kwa ujenzi wa nyumba ya kifamilia au mradi wa nyumba za kukodisha.' },
+                source: 'Trusted residential listing data for Arusha region'
+            },
+            {
+                id: 106,
+                title: 'Shamba la Kilimo Iringa – Ekari 8 kwa Kahawa na Nyumba',
+                type: 'Agricultural',
+                price: 29000000,
+                size: 8,
+                unit: 'Hektari',
+                region: 'Iringa',
+                district: 'Kilolo',
+                ward: 'Udekwa',
+                village: 'Kimani',
+                lat: '-7.719',
+                lon: '35.691',
+                road: '1.5 km kutoka barabara ya changarawe',
+                roadcond: 'Gravel road',
+                deed: 'Registered Title Deed',
+                topo: 'Mteremko Mdogo',
+                soil: 'Udongo wa Mbolea',
+                utilities: ['Water', 'Electricity', 'Borehole'],
+                amenities: '4 km kutoka soko, 2 km shule, 6 km kituo cha afya',
+                desc: 'Shamba ya kilimo yenye udongo mzuri kwa kahawa, miembe, au mboga, pamoja na mpango wa nyumba ya msimamizi wa shamba. Inauzwa kwa bei halisi kwa wanunuzi wa kilimo na maendeleo ya ardhi.',
+                images: [
+                    'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1500534314209-a9c8ff223c5d?auto=format&fit=crop&w=1200&q=80'
+                ],
+                featured: false,
+                contact: { name: 'Juma Mwinyi', phone: '+255 755 987 654', preferred: 'WhatsApp', email: 'juma@example.com', notes: 'Inafaa kwa wakulima wa kahawa, matunda, au mradi wa nyumba za msimamizi wa shamba.' },
+                source: 'Trusted agricultural market data for Iringa region'
+            }
+        ];
+
+        function filterSampleListings(filters) {
+            return sampleListings.filter(l => {
+                if (filters.region && l.region !== filters.region) return false;
+                if (filters.type && l.type !== filters.type) return false;
+                if (filters.maxPrice && l.price > filters.maxPrice) return false;
+                return true;
+            });
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  API HELPERS
+        // ──────────────────────────────────────────────────────────────
+        async function apiFetch(endpoint, options = {}) {
+            const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${endpoint}`;
+            const res = await fetch(url, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(options.headers || {}),
+                },
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ message: 'Server error' }));
+                throw new Error(err.message || `HTTP ${res.status}`);
+            }
+            return res.json();
+        }
+
+        async function fetchListings(filters = {}) {
+            const params = new URLSearchParams();
+            if (filters.region) params.set('region', filters.region);
+            if (filters.type) params.set('type', filters.type);
+            if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
+            if (filters.limit) params.set('limit', filters.limit);
+
+            const qs = params.toString();
+            try {
+                const data = await apiFetch(`/listings${qs ? '?' + qs : ''}`);
+                return data.listings || [];
+            } catch (err) {
+                console.warn('Backend unavailable, using sample listings', err);
+                return filterSampleListings(filters);
+            }
+        }
+
+        async function fetchListing(id) {
+            try {
+                return await apiFetch(`/listings/${id}`);
+            } catch (err) {
+                console.warn('Backend unavailable, using sample listing', err);
+                return sampleListings.find(l => l.id === id) || null;
+            }
+        }
+
+        async function createListing(data) {
+            return await apiFetch('/listings', {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
+        }
+
+        async function uploadImages(files) {
+            const formData = new FormData();
+            for (const f of files) formData.append('images', f);
+            const res = await fetch(`${API_BASE}/upload`, {
+                method: 'POST',
+                body: formData,
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.message || 'Upload failed');
+            }
+            return res.json();
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  RENDER LISTINGS
+        // ──────────────────────────────────────────────────────────────
+        const cardColors = {
+            'from-green': 'linear-gradient(135deg,#0D2B1A 0%,#1A4029 40%,#2D6845 70%,#3a8a5c 100%)',
+            'from-blue': 'linear-gradient(135deg,#0A1A2E 0%,#1A3A5C 40%,#2563A8 70%,#3B82C4 100%)',
+            'from-amber': 'linear-gradient(135deg,#2A1800 0%,#5C3300 40%,#A0600A 70%,#C9A84C 100%)',
+            'from-purple': 'linear-gradient(135deg,#1A0A2E 0%,#3A1A5C 40%,#6B3AA8 70%,#8B5CF6 100%)',
+            'from-cyan': 'linear-gradient(135deg,#001A2E 0%,#003A5C 40%,#0070A8 70%,#00A8D4 100%)',
+        };
+
+        function fmtPrice(p) {
+            if (p >= 1000000) return 'TSh ' + (p / 1000000).toFixed(1) + 'M';
+            if (p >= 1000) return 'TSh ' + (p / 1000).toFixed(0) + 'K';
+            return 'TSh ' + p.toLocaleString();
+        }
+
+        function deedClass(deed) {
+            if (!deed) return 'deed-none';
+            if (deed.includes('Registered')) return 'deed-verified';
+            if (deed.includes('Pending') || deed.includes('Surveyed') || deed.includes('Letter') || deed.includes('Village'))
+                return 'deed-pending';
+            return 'deed-none';
+        }
+
+        function deedShort(deed, lang = 'sw') {
+            if (!deed) return lang === 'sw' ? '⚠ Hakuna Hati Rasmi' : '⚠ No Official Title';
+            if (deed.includes('Registered')) return lang === 'sw' ? '✓ Hati Miliki Imethibitishwa' : '✓ Title Deed Verified';
+            if (deed.includes('Surveyed')) return lang === 'sw' ? '⏳ Imepimwa – Inasubiri' : '⏳ Surveyed – Pending';
+            if (deed.includes('Village')) return lang === 'sw' ? '📜 Cheti cha Kijiji' : '📜 Village Certificate';
+            if (deed.includes('Letter')) return lang === 'sw' ? '📋 Barua ya Ofa' : '📋 Letter of Offer';
+            return lang === 'sw' ? '⚠ Hakuna Hati Rasmi' : '⚠ No Official Title';
+        }
+
+        function getColor(listing) {
+            if (listing.color) return cardColors[listing.color] || cardColors['from-green'];
+            const colors = ['from-green', 'from-blue', 'from-amber', 'from-purple', 'from-cyan'];
+            const idx = (listing.id || 0) % colors.length;
+            return cardColors[colors[idx]];
+        }
+
+        function renderListings(listings) {
+            const grid = document.getElementById('listings-grid');
+            const noRes = document.getElementById('no-results');
+            const countLabel = document.getElementById('listing-count');
+            const lang = currentLang;
+            const countText = lang === 'sw'
+                ? `${listings.length} orodha zinazopatikana`
+                : `${listings.length} listing${listings.length !== 1 ? 's' : ''} found`;
+            countLabel.textContent = countText;
+
+            if (!listings.length) {
+                grid.innerHTML = '';
+                noRes.style.display = 'block';
+                return;
+            }
+            noRes.style.display = 'none';
+
+            grid.innerHTML = listings.map(l => `
+            <div class="land-card" onclick="openModal(${l.id})">
+              <div class="card-image">
+                <div class="card-image-art" style="background:${getColor(l)}">
+                  ${l.images && l.images.length ? `<img src="${l.images[0]}" alt="${l.title}" />` : landSVG(l.type)}
+                </div>
+                <div class="card-badge">${l.type || (lang === 'sw' ? 'Ardhi' : 'Land')}</div>
+                ${l.featured ? '<div class="card-featured">★ Featured</div>' : ''}
+              </div>
+              <div class="card-body">
+                <div class="card-price">${fmtPrice(l.price)} <span>/ ${l.size || '?'} ${l.unit || ''}</span></div>
+                <div class="card-title">${l.title}</div>
+                <div class="card-location">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1C4.3 1 3 2.3 3 4c0 2.5 3 7 3 7s3-4.5 3-7c0-1.7-1.3-3-3-3zm0 4a1 1 0 110-2 1 1 0 010 2z" fill="#7A9085"/></svg>
+                  ${[l.ward, l.district, l.region].filter(Boolean).join(', ')}
+                </div>
+                <div class="card-meta">
+                  <div class="meta-item"><div class="meta-label">${lang === 'sw' ? 'Ukubwa' : 'Size'}</div><div class="meta-val">${l.size || '?'} ${l.unit || ''}</div></div>
+                  <div class="meta-item"><div class="meta-label">${lang === 'sw' ? 'Udongo' : 'Soil'}</div><div class="meta-val">${l.soil ? l.soil.split(' ')[0] : '—'}</div></div>
+                  <div class="meta-item"><div class="meta-label">${lang === 'sw' ? 'Barabara' : 'Road'}</div><div class="meta-val">${l.roadcond ? l.roadcond.split(' ')[0] : '—'}</div></div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="deed-badge ${deedClass(l.deed)}">${deedShort(l.deed, lang)}</div>
+                <button class="view-btn">${lang === 'sw' ? 'Angalia Maelezo →' : 'View Details →'}</button>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function landSVG(type) {
+            const svgs = {
+                Agricultural: `<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;opacity:.18"><path d="M0 170 Q85 140 170 165 Q255 190 340 150 L340 220 L0 220Z" fill="#C9A84C"/><path d="M0 200 Q170 170 340 190 L340 220 L0 220Z" fill="#A8832A" opacity=".5"/><circle cx="60" cy="100" r="35" fill="#2D6845" opacity=".8"/><circle cx="90" cy="85" r="28" fill="#2D6845"/><circle cx="45" cy="80" r="22" fill="#1A4029"/><circle cx="200" cy="120" r="30" fill="#2D6845" opacity=".7"/><circle cx="230" cy="105" r="24" fill="#2D6845"/><rect x="140" y="140" width="3" height="40" fill="#A8832A"/><rect x="160" y="135" width="3" height="45" fill="#A8832A"/><rect x="120" y="145" width="3" height="35" fill="#A8832A"/></svg>`,
+                Residential: `<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;opacity:.2"><rect x="120" y="90" width="100" height="80" fill="#C9A84C"/><polygon points="110,90 240,90 175,45" fill="#A8832A"/><rect x="155" y="130" width="25" height="40" fill="#1A4029"/><rect x="125" y="100" width="25" height="25" rx="2" fill="#1A4029"/><rect x="190" y="100" width="25" height="25" rx="2" fill="#1A4029"/><path d="M0 185 Q170 165 340 175 L340 220 L0 220Z" fill="#A8832A" opacity=".5"/></svg>`,
+                Commercial: `<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;opacity:.2"><rect x="140" y="60" width="60" height="110" fill="#C9A84C"/><rect x="80" y="100" width="55" height="70" fill="#A8832A"/><rect x="205" y="80" width="55" height="90" fill="#A8832A"/><rect x="145" y="65" width="8" height="12" fill="#1A4029"/><rect x="160" y="65" width="8" height="12" fill="#1A4029"/><rect x="175" y="65" width="8" height="12" fill="#1A4029"/><rect x="145" y="85" width="8" height="12" fill="#1A4029"/><rect x="160" y="85" width="8" height="12" fill="#1A4029"/><rect x="175" y="85" width="8" height="12" fill="#1A4029"/><path d="M0 185 Q170 165 340 175 L340 220 L0 220Z" fill="#A8832A" opacity=".4"/></svg>`,
+                default: `<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;opacity:.15"><path d="M0 160 Q85 130 170 155 Q255 180 340 140 L340 220 L0 220Z" fill="#C9A84C"/><circle cx="170" cy="90" r="50" fill="#2D6845" opacity=".5"/></svg>`
+            };
+            return svgs[type] || svgs.default;
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  MODAL
+        // ──────────────────────────────────────────────────────────────
+        async function openModal(id) {
+            try {
+                const l = await fetchListing(id);
+                const box = document.getElementById('modal-box');
+                const lang = currentLang;
+                document.getElementById('modal')._currentId = id;
+
+                const utilLabels = {
+                    'Water': lang === 'sw' ? '💧 Chanzo cha Maji' : '💧 Water Source',
+                    'Electricity': lang === 'sw' ? '⚡ Umeme' : '⚡ Electricity',
+                    'Borehole': lang === 'sw' ? '🔩 Kisima cha Bomba' : '🔩 Borehole',
+                    'River': lang === 'sw' ? '🌊 Mto / Kijito' : '🌊 River / Stream',
+                    'Internet': lang === 'sw' ? '📶 Mtandao / Mawasiliano' : '📶 Internet / Network',
+                    'Fence': lang === 'sw' ? '🔒 Uzio' : '🔒 Fenced',
+                };
+
+                const utilRows = ['Water', 'Electricity', 'Borehole', 'River', 'Internet', 'Fence'].map(u => {
+                    const has = l.utilities && l.utilities.includes(u);
+                    return `<div class="util-chip ${has ? 'yes' : 'no'}">${has ? '✓' : '✗'} ${utilLabels[u] || u}</div>`;
+                }).join('');
+
+                const images = l.images && l.images.length ?
+                    `<img src="${l.images[0]}" alt="${l.title}" />` :
+                    landSVG(l.type);
+
+                const contactLabel = lang === 'sw' ? 'Wasiliana na Muuzaji →' : 'Contact Seller →';
+                const aboutLabel = lang === 'sw' ? 'Kuhusu Ardhi Hii' : 'About This Land';
+                const utilitiesLabel = lang === 'sw' ? 'Huduma na Miundombinu' : 'Utilities & Infrastructure';
+                const amenitiesLabel = lang === 'sw' ? 'Huduma za Karibu' : 'Nearby Amenities';
+
+                box.innerHTML = `
+              <div class="modal-hero" style="background:${getColor(l)}">
+                ${images}
+                <button class="modal-close" onclick="closeModal()">✕</button>
+                <div style="position:absolute;bottom:1.5rem;left:1.5rem;display:flex;gap:.5rem">
+                  <div class="card-badge">${l.type || (lang === 'sw' ? 'Ardhi' : 'Land')}</div>
+                  ${l.featured ? '<div class="card-featured">★ Featured</div>' : ''}
+                </div>
+              </div>
+              <div class="modal-body">
+                <div class="modal-price-row">
+                  <div>
+                    <div class="modal-title-h">${l.title}</div>
+                    <div class="modal-location">
+                      <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M6 1C4.3 1 3 2.3 3 4c0 2.5 3 7 3 7s3-4.5 3-7c0-1.7-1.3-3-3-3zm0 4a1 1 0 110-2 1 1 0 010 2z" fill="#7A9085"/></svg>
+                      ${[l.village, l.ward, l.district, l.region].filter(Boolean).join(', ')}
+                    </div>
+                  </div>
+                  <div style="text-align:right">
+                    <div class="modal-price">${fmtPrice(l.price)} <small>/ ${l.size || '?'} ${l.unit || ''}</small></div>
+                    <div class="deed-badge ${deedClass(l.deed)}" style="display:inline-block;margin-top:.4rem">${deedShort(l.deed, lang)}</div>
+                  </div>
+                </div>
+
+                <div class="info-grid">
+                  <div class="info-card"><div class="info-card-label">${lang === 'sw' ? 'Jumla ya Eneo' : 'Total Area'}</div><div class="info-card-val">${l.size || '?'} ${l.unit || ''}</div></div>
+                  <div class="info-card"><div class="info-card-label">${lang === 'sw' ? 'Topografia' : 'Topography'}</div><div class="info-card-val">${l.topo || '—'}</div></div>
+                  <div class="info-card"><div class="info-card-label">${lang === 'sw' ? 'Aina ya Udongo' : 'Soil Type'}</div><div class="info-card-val">${l.soil || '—'}</div></div>
+                  <div class="info-card"><div class="info-card-label">${lang === 'sw' ? 'Hali ya Barabara' : 'Road Access'}</div><div class="info-card-val good">${l.roadcond ? l.roadcond.split('/')[0].trim() : '—'}</div></div>
+                  <div class="info-card"><div class="info-card-label">GPS</div><div class="info-card-val" style="font-size:.8rem">${l.lat || '?'}, ${l.lon || '?'}</div></div>
+                  <div class="info-card"><div class="info-card-label">${lang === 'sw' ? 'Umbali kutoka Barabara' : 'Distance to Road'}</div><div class="info-card-val" style="font-size:.82rem">${l.road || (lang === 'sw' ? 'Haujabainishwa' : 'Not specified')}</div></div>
+                </div>
+
+                <div class="modal-section-title">${aboutLabel}</div>
+                <p class="modal-desc">${l.desc || (lang === 'sw' ? 'Hakuna maelezo yaliyotolewa.' : 'No description provided.')}</p>
+
+                <div class="modal-section-title">${utilitiesLabel}</div>
+                <div class="utilities-row">${utilRows}</div>
+
+                <div class="modal-section-title">${amenitiesLabel}</div>
+                <p style="font-size:.9rem;color:var(--text-body);margin-bottom:1.5rem;line-height:1.7">${l.amenities || (lang === 'sw' ? 'Haujabainishwa' : 'Not specified')}</p>
+
+                <div class="contact-box">
+                  <div class="contact-info">
+                    <div class="contact-name">${l.contact?.name || (lang === 'sw' ? 'Mawasiliana' : 'Contact')}</div>
+                    <div class="contact-detail">${l.contact?.phone || ''} ${l.contact?.preferred ? '· ' + (lang === 'sw' ? 'Anapendelea' : 'Prefers') + ': '+l.contact.preferred : ''}</div>
+                  </div>
+                  <button class="btn-contact" onclick="contactSeller('${l.contact?.phone || ''}','${l.contact?.preferred || ''}')">
+                    ${contactLabel}
+                  </button>
+                </div>
+              </div>
+            `;
+                document.getElementById('modal').classList.add('open');
+                document.body.style.overflow = 'hidden';
+            } catch (err) {
+                showToast(currentLang === 'sw' ? 'Kosa kupakia orodha: ' + err.message : 'Error loading listing: ' + err.message);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnBg(e) {
+            if (e.target === document.getElementById('modal')) closeModal();
+        }
+
+        function contactSeller(phone, method) {
+            if (!phone) { showToast(currentLang === 'sw' ? 'Hakuna nambari ya simu iliyopo' : 'No phone number available'); return; }
+            const clean = phone.replace(/[\s+\-]/g, '');
+            if (method === 'WhatsApp') {
+                window.open('https://wa.me/' + clean, '_blank');
+            } else {
+                window.location.href = 'tel:' + phone;
+            }
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  FILTERS
+        // ──────────────────────────────────────────────────────────────
+        function setFilter(type, btn) {
+            activeFilter = type;
+            document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilters();
+        }
+
+        function filterListings() {
+            activeSearch.region = document.getElementById('filter-region').value;
+            activeSearch.type = document.getElementById('filter-type').value;
+            activeSearch.price = document.getElementById('filter-price').value;
+            applyFilters();
+        }
+
+        async function applyFilters() {
+            const filters = {};
+            if (activeFilter !== 'all') filters.type = activeFilter;
+            if (activeSearch.region) filters.region = activeSearch.region;
+            if (activeSearch.type) filters.type = activeSearch.type;
+            if (activeSearch.price) filters.maxPrice = parseInt(activeSearch.price);
+
+            try {
+                const data = await fetchListings(filters);
+                allListings = data;
+                renderListings(data);
+            } catch (err) {
+                showToast(currentLang === 'sw' ? 'Kosa kupakia orodha: ' + err.message : 'Error loading listings: ' + err.message);
+            }
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  FORM STEPS
+        // ──────────────────────────────────────────────────────────────
+        let currentStep = 1;
+
+        function goStep(n) {
+            document.getElementById('step' + currentStep).classList.remove('active');
+            document.getElementById('sb' + currentStep).classList.remove('active');
+            currentStep = n;
+            document.getElementById('step' + n).classList.add('active');
+            document.getElementById('sb' + n).classList.add('active');
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+        }
+
+        function handleFiles(files) {
+            const prev = document.getElementById('photo-previews');
+            uploadedFiles = [];
+            prev.innerHTML = '';
+            Array.from(files).slice(0, 10).forEach(f => {
+                uploadedFiles.push(f);
+                const r = new FileReader();
+                r.onload = e => {
+                    const d = document.createElement('div');
+                    d.className = 'photo-preview';
+                    d.innerHTML = `
+                <img src="${e.target.result}" alt="picha ya ardhi" />
+                <button class="remove-photo" onclick="removePhoto(this, '${f.name}')">✕</button>
+              `;
+                    prev.appendChild(d);
+                };
+                r.readAsDataURL(f);
+            });
+        }
+
+        function removePhoto(btn, name) {
+            const idx = uploadedFiles.findIndex(f => f.name === name);
+            if (idx > -1) uploadedFiles.splice(idx, 1);
+            const preview = btn.closest('.photo-preview');
+            if (preview) preview.remove();
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  SUBMIT LISTING
+        // ──────────────────────────────────────────────────────────────
+        async function submitListing() {
+            if (isSubmitting) return;
+            const required = [
+                { id: 'f-title', label: currentLang === 'sw' ? 'Kichwa' : 'Title' },
+                { id: 'f-type', label: currentLang === 'sw' ? 'Aina ya Ardhi' : 'Land Type' },
+                { id: 'f-price', label: 'Price' },
+                { id: 'f-size', label: currentLang === 'sw' ? 'Eneo' : 'Area' },
+                { id: 'f-desc', label: currentLang === 'sw' ? 'Maelezo' : 'Description' },
+                { id: 'f-region', label: currentLang === 'sw' ? 'Mkoa' : 'Region' },
+                { id: 'f-district', label: currentLang === 'sw' ? 'Wilaya' : 'District' },
+                { id: 'f-ward', label: currentLang === 'sw' ? 'Kata' : 'Ward' },
+                { id: 'f-village', label: currentLang === 'sw' ? 'Kijiji / Mtaa' : 'Village / Street' },
+                { id: 'f-lat', label: currentLang === 'sw' ? 'GPS Latitude' : 'Latitudo ya GPS' },
+                { id: 'f-lon', label: currentLang === 'sw' ? 'GPS Longitude' : 'Longitudo ya GPS' },
+                { id: 'f-road', label: currentLang === 'sw' ? 'Umbali kutoka Barabara Kuu' : 'Distance from Main Road' },
+                { id: 'f-deed', label: currentLang === 'sw' ? 'Hali ya Hati Miliki' : 'Deed Status' },
+                { id: 'f-name', label: currentLang === 'sw' ? 'Jina Lako' : 'Your Name' },
+                { id: 'f-phone', label: currentLang === 'sw' ? 'Nambari ya Simu' : 'Phone Number' }
+            ];
+            for (const r of required) {
+                const el = document.getElementById(r.id);
+                if (!el || !el.value.trim()) {
+                    showToast((currentLang === 'sw' ? 'Tafadhali jaza: ' : 'Please fill in: ') + r.label);
+                    return;
+                }
+            }
+
+            isSubmitting = true;
+            const submitBtn = document.querySelector('.btn-submit');
+            submitBtn.textContent = currentLang === 'sw' ? 'Inachapisha…' : 'Publishing…';
+            submitBtn.disabled = true;
+
+            try {
+                let imageUrls = [];
+                if (uploadedFiles.length) {
+                    const uploadResult = await uploadImages(uploadedFiles);
+                    imageUrls = uploadResult.urls || [];
+                }
+
+                const utils = Array.from(document.querySelectorAll('#utilities-group .checked input'))
+                    .map(i => i.value);
+
+                const data = {
+                    title: document.getElementById('f-title').value,
+                    type: document.getElementById('f-type').value,
+                    price: parseInt(document.getElementById('f-price').value) || 0,
+                    size: parseFloat(document.getElementById('f-size').value) || 0,
+                    unit: document.getElementById('f-unit').value,
+                    region: document.getElementById('f-region').value,
+                    district: document.getElementById('f-district').value,
+                    ward: document.getElementById('f-ward').value,
+                    village: document.getElementById('f-village').value,
+                    lat: document.getElementById('f-lat').value || null,
+                    lon: document.getElementById('f-lon').value || null,
+                    road: document.getElementById('f-road').value || null,
+                    roadcond: document.getElementById('f-roadcond').value,
+                    deed: document.getElementById('f-deed').value,
+                    topo: document.getElementById('f-topo').value,
+                    soil: document.getElementById('f-soil').value,
+                    utilities: utils,
+                    amenities: document.getElementById('f-amenities').value || null,
+                    desc: document.getElementById('f-desc').value,
+                    contact: {
+                        name: document.getElementById('f-name').value,
+                        phone: document.getElementById('f-phone').value,
+                        preferred: document.getElementById('f-contact').value,
+                        email: document.getElementById('f-email').value || null,
+                        role: document.getElementById('f-role').value,
+                        notes: document.getElementById('f-notes').value || null,
+                    },
+                    images: imageUrls,
+                    featured: false,
+                    color: ['from-green', 'from-blue', 'from-amber', 'from-purple', 'from-cyan'][Math.floor(Math
+                    .random() * 5)]
+                };
+
+                await createListing(data);
+
+                document.querySelectorAll('.form-step').forEach((s, i) => { s.style.display = '';
+                    s.classList.remove('active') });
+                document.querySelector('.step-nav').style.display = '';
+                document.getElementById('success-state').classList.add('show');
+
+                await applyFilters();
+                showToast(currentLang === 'sw' ? '🎉 Orodha yako sasa iko hai!' : '🎉 Your listing is now live!');
+
+            } catch (err) {
+                showToast(currentLang === 'sw' ? 'Kosa: ' + err.message : 'Error: ' + err.message);
+            } finally {
+                isSubmitting = false;
+                submitBtn.textContent = currentLang === 'sw' ? 'Chapisha Orodha ✓' : 'Publish Listing ✓';
+                submitBtn.disabled = false;
+            }
+        }
+
+        function resetForm() {
+            document.querySelectorAll('.form-step').forEach((s, i) => { s.style.display = '';
+                s.classList.remove('active') });
+            document.querySelector('.step-nav').style.display = '';
+            document.getElementById('success-state').classList.remove('show');
+            document.getElementById('step1').classList.add('active');
+            document.querySelectorAll('.step-btn').forEach((b, i) => { b.classList.toggle('active', i === 0) });
+            currentStep = 1;
+            ['f-title', 'f-type', 'f-price', 'f-size', 'f-desc', 'f-region', 'f-district',
+                'f-ward', 'f-village', 'f-lat', 'f-lon', 'f-road', 'f-deed', 'f-amenities',
+                'f-name', 'f-phone', 'f-email', 'f-notes'
+            ].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.querySelectorAll('.checkbox-item').forEach(el => el.classList.remove('checked'));
+            document.getElementById('photo-previews').innerHTML = '';
+            uploadedFiles = [];
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  TOAST
+        // ──────────────────────────────────────────────────────────────
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timeout);
+            t._timeout = setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  CURSOR
+        // ──────────────────────────────────────────────────────────────
+        const cur = document.getElementById('cursor');
+        const ring = document.getElementById('cursorRing');
+        let mx = 0,
+            my = 0,
+            rx = 0,
+            ry = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX;
+            my = e.clientY;
+            cur.style.left = (mx - 6) + 'px';
+            cur.style.top = (my - 6) + 'px';
+        });
+
+        function animRing() {
+            rx += (mx - rx - 18) * .12;
+            ry += (my - ry - 18) * .12;
+            ring.style.left = rx + 'px';
+            ring.style.top = ry + 'px';
+            requestAnimationFrame(animRing);
+        }
+        animRing();
+        document.querySelectorAll('a,button,.land-card').forEach(el => {
+            el.addEventListener('mouseenter', () => { cur.style.transform = 'scale(2.5)';
+                ring.style.opacity = '0' });
+            el.addEventListener('mouseleave', () => { cur.style.transform = 'scale(1)';
+                ring.style.opacity = '.6' });
+        });
+
+        // ──────────────────────────────────────────────────────────────
+        //  NAV SCROLL
+        // ──────────────────────────────────────────────────────────────
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ──────────────────────────────────────────────────────────────
+        //  COUNTER ANIMATION
+        // ──────────────────────────────────────────────────────────────
+        function animCount(el, target, suffix = '') {
+            let start = 0;
+            const dur = 2000;
+            const step = dur / 60;
+            const inc = target / 60;
+            const t = setInterval(() => {
+                start = Math.min(start + inc, target);
+                el.textContent = Math.floor(start) + (suffix || '');
+                if (start >= target) { el.textContent = target + (suffix || '');
+                    clearInterval(t); }
+            }, step);
+        }
+
+        // ──────────────────────────────────────────────────────────────
+        //  SCROLL REVEAL
+        // ──────────────────────────────────────────────────────────────
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible');
+                    obs.unobserve(e.target); } });
+        }, { threshold: .15 });
+        document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+        // ──────────────────────────────────────────────────────────────
+        //  INIT
+        // ──────────────────────────────────────────────────────────────
+        async function init() {
+            try {
+                const data = await fetchListings({ limit: 100 });
+                allListings = data;
+                renderListings(data);
+                animCount(document.getElementById('stat1'), data.length);
+                animCount(document.getElementById('stat2'), 20, '+');
+                animCount(document.getElementById('stat3'), 1240, '+');
+                // Default to Swahili
+                setLanguage('sw');
+            } catch (err) {
+                showToast(currentLang === 'sw' ? 'Haikuwezekana kuunganisha kwenye seva. Hakikisha backend inakimbia.' : 'Could not connect to server. Make sure the backend is running.');
+                document.getElementById('listings-grid').innerHTML = `
+              <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted)">
+                <div style="font-size:2rem;margin-bottom:1rem">⚠️</div>
+                <div style="font-weight:600;color:var(--slate)">${currentLang === 'sw' ? 'Haikuwezekani kupakia orodha' : 'Unable to load listings'}</div>
+                <div style="font-size:.9rem;margin-top:.5rem">${err.message}</div>
+                <button onclick="init()" style="margin-top:1rem;padding:.6rem 1.5rem;border-radius:100px;border:none;background:var(--gold);color:var(--forest);font-weight:600;cursor:pointer">${currentLang === 'sw' ? 'Jaribu tena' : 'Retry'}</button>
+              </div>
+            `;
+                document.getElementById('listing-count').textContent = currentLang === 'sw' ? '⚠ Tatizo la muunganisho' : '⚠ Connection error';
+            }
+        }
+
+        init();
+
+        // ──────────────────────────────────────────────────────────────
+        //  AUTO-REFRESH listings every 60s
+        // ──────────────────────────────────────────────────────────────
+        setInterval(async () => {
+            try {
+                const data = await fetchListings({ limit: 100 });
+                allListings = data;
+                const region = document.getElementById('filter-region').value;
+                const type = document.getElementById('filter-type').value;
+                const price = document.getElementById('filter-price').value;
+                if (!region && !type && !price && activeFilter === 'all') {
+                    renderListings(data);
+                }
+            } catch (_) { /* silent */ }
+        }, 60000);
+    </script>
+</body>
+</html>

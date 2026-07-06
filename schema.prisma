@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Listing {
+  id               Int      @id @default(autoincrement())
+  title            String
+  type             String?
+  price            Int
+  size             Float?
+  unit             String?
+  region           String?
+  district         String?
+  ward             String?
+  village          String?
+  lat              String?
+  lon              String?
+  road             String?
+  roadcond         String?
+  deed             String?
+  topo             String?
+  soil             String?
+  utilities        String?
+  amenities        String?
+  desc             String?
+  contactName      String?
+  contactPhone     String?
+  contactPreferred String?
+  contactEmail     String?
+  contactRole      String?
+  contactNotes     String?
+  images           String?
+  featured         Boolean  @default(false)
+  color            String?
+  createdAt        DateTime @default(now())
+}
